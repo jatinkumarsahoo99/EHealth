@@ -2048,21 +2048,21 @@ class MyPage1Widget extends StatelessWidget {
             children: [
               (loginResponse1.body?.userStateId != null &&
                       loginResponse1.body?.userStateId == "21")
+              // heys
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                          Expanded(
-                            child: _buildTilePremium(
-                              icon: "assets/folder.png",
-                              fun: () {
-                                //AppData.showInSnackBar(context, "Coming soon");
-                                //Navigator.pushNamed(context, "/medicalrecordpage");
-                                _displayTextInputDialog(context, 1);
-                              },
-                              color: AppData.BG2BLUE,
-                              bordercolor: AppData.BG2BLUE,
-                            ),
+                          _buildTilePremium(
+                            icon: "assets/folder.png",
+                            fun: () {
+                              //AppData.showInSnackBar(context, "Coming soon");
+                              //Navigator.pushNamed(context, "/medicalrecordpage");
+                              _displayTextInputDialog(context, 1);
+                            },
+                            size: size,
+                            color: AppData.BG2BLUE,
+                            bordercolor: AppData.BG2BLUE,
                           ),
                           SizedBox(
                             height: 5,
@@ -2076,7 +2076,7 @@ class MyPage1Widget extends StatelessWidget {
                                   .text("MEDICAL_RECORD"),
                               textAlign: TextAlign.center,
                               //overflow: TextOverflow.ellipsis,
-                              // style: TextStyle(fontSize: 30),
+                              style: TextStyle(fontSize: 12),
                             ),
                           ),
                         ])
@@ -2138,6 +2138,7 @@ class MyPage1Widget extends StatelessWidget {
                               /*  AppData.showSnack(
                                     context, "Coming soon", Colors.green);*/
                             },
+                            size: size,
                             color: AppData.BG1RED,
                             bordercolor: AppData.BG1RED,
                             //size: (size.width - 130) / 3,
@@ -2901,7 +2902,7 @@ class MyPage1Widget extends StatelessWidget {
   Widget _buildTilePremium(
       {String icon,
       String title,
-      double size,
+      Size size,
       Color bordercolor,
       Color iconColor,
       Color color,
@@ -2909,9 +2910,9 @@ class MyPage1Widget extends StatelessWidget {
     return InkWell(
       onTap: fun,
       child: Container(
-        padding: const EdgeInsets.all(0.0),
-        height: _height,
-        width: _width,
+        // padding: const EdgeInsets.all(0.0),
+        height: size.height * 0.1525 - 45,
+        width: size.height * 0.1525 - 45,
         decoration: BoxDecoration(
           color: color,
           image:
@@ -2930,8 +2931,8 @@ class MyPage1Widget extends StatelessWidget {
                       icon,
                       color: iconColor ?? null,
                       fit: BoxFit.fitWidth,
-                      width: 50,
-                      height: 70.0,
+                      width: size.height * 0.05,
+                      height: size.height * 0.05,
                     )),
               ],
             ),
@@ -2945,7 +2946,7 @@ class MyPage1Widget extends StatelessWidget {
       {String icon,
       /*IconData icon,*/
       String title,
-      double size,
+      Size size,
       Color bordercolor,
       Color iconColor,
       Color color,
@@ -2955,8 +2956,8 @@ class MyPage1Widget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(0.0),
         /* height: MediaQuery.of(context).size.height * 0.23,*/
-        height: _height,
-        width: _width,
+        height: size.height * 0.1525 - 45,
+        width: size.height * 0.1525 - 45,
         decoration: BoxDecoration(
           // /// borderRadius: BorderRadius.circular(7.0),
           // borderRadius: BorderRadius.only(
@@ -2995,8 +2996,8 @@ class MyPage1Widget extends StatelessWidget {
                       icon,
                       color: iconColor ?? null,
                       fit: BoxFit.fitWidth,
-                      width: 50,
-                      height: 70.0,
+                      width: size.height * 0.05,
+                      height: size.height * 0.05,
                     )),
                 //child: Icon(icon, color: AppData.kPrimaryColor,size: 40.0)),
 

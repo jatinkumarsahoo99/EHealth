@@ -108,7 +108,7 @@ class _FindHealthcareServiceState extends State<FindHealthcareService> {
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           children: [
-                            (loginResponse1.body?.userStateId != null&&loginResponse1.body.userStateId  != "21" )?
+                           // (loginResponse1.body?.userStateId != null&&loginResponse1.body.userStateId  != "21" )?
                             GestureDetector(
                               onTap: () {
                                 Navigator.pushNamed(
@@ -167,8 +167,10 @@ class _FindHealthcareServiceState extends State<FindHealthcareService> {
                                       ),
                                     )),
                               ),
-                            ):Container(),
-                            (loginResponse1.body?.userStateId != null&&loginResponse1.body.userStateId  != "21" )?
+                            ),
+                           //     :Container(),
+                           // (loginResponse1.body?.userStateId != null&&loginResponse1.body.userStateId  != "21" )?
+
                             GestureDetector(
                               onTap: () {
                                 Navigator.pushNamed(
@@ -231,7 +233,8 @@ class _FindHealthcareServiceState extends State<FindHealthcareService> {
                                       ),
                                     )),
                               ),
-                            ):Container(),
+                            ),
+                               // :Container(),
                             GestureDetector(
                               onTap: () =>
                                   Navigator.pushNamed(
