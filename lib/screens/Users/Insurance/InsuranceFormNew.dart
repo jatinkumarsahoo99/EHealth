@@ -1505,8 +1505,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
       idproof = image1.path;
       //adduploaddocument.extension = extName;
       extension = extName;
-      print("Message is: " +
-          extension); // adduploaddocument.mulFile=file.path as MultipartFile;
+      print("Message is: " + extension); // adduploaddocument.mulFile=file.path as MultipartFile;
       print("Message isssss: " +
           extName); // adduploaddocument.mulFile=file.path as MultipartFile;
     });

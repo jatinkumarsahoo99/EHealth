@@ -297,8 +297,7 @@ class _DoctorUploadDocumentState extends State<DoctorUploadDocument> {
                                             String pdfurl = body.fileName;
                                             String extension =
                                             AppData.getExt(pdfurl);
-                                            print("eeeessssssssstttt" +
-                                                extension);
+                                            print("eeeessssssssstttt" + extension);
                                             widget.model.pdfurl = pdfurl;
                                             print("ppppdddddddddddffffff" +
                                                 pdfurl);

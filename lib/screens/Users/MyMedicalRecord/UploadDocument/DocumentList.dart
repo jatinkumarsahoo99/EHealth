@@ -183,8 +183,7 @@ class _DocumentListState extends State<DocumentList> {
                                                     CrossAxisAlignment.center,
                                                 children: [
                                                   Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(5.0),
+                                                    padding: const EdgeInsets.all(5.0),
                                                     child: Container(
                                                         // color:AppData.kPrimaryRedColor,
                                                         decoration: (i % 2 == 0)

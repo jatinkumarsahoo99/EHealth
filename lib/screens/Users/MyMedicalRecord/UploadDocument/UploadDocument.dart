@@ -285,8 +285,7 @@ class _UploadDocumentState extends State<UploadDocument> {
                                                         child: InkWell(
                                                           onTap: () {
                                                             String pdfurl = body.fileName;
-                                                            String extension =
-                                                            AppData.getExt(pdfurl);
+                                                            String extension = AppData.getExt(pdfurl);
                                                             print("eeeessssssssstttt" +
                                                                 extension);
                                                             widget.model.pdfurl = pdfurl;
@@ -312,8 +311,6 @@ class _UploadDocumentState extends State<UploadDocument> {
                                                                       (value) =>
                                                                   widget.model.pdfurl);
 
-                                                              /*  Navigator.pushNamed(context, "/documentimage",).then((
-                                          value) => widget.model.pdfurl);*/
                                                             } else if (format == "doc") {
                                                               Navigator.push(
                                                                   context,
@@ -325,8 +322,6 @@ class _UploadDocumentState extends State<UploadDocument> {
                                                                           ))).then(
                                                                       (value) =>
                                                                   widget.model.pdfurl);
-/*                                  Navigator.pushNamed(context, "/documentpdf",)
-                                          .then((value) => widget.model.pdfurl);*/
                                                             } else if (format == "vdo") {
                                                               Navigator.push(
                                                                   context,

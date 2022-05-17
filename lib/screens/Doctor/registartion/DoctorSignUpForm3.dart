@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -14,10 +13,6 @@ import 'package:user/widgets/text_field_container.dart';
 import 'package:user/widgets/MyWidget.dart';
 import '../../../localization/localizations.dart';
 import '../../../models/KeyvalueModel.dart';
-import '../../../models/KeyvalueModel.dart';
-import '../../../models/KeyvalueModel.dart';
-import '../../../providers/app_data.dart';
-import '../../../providers/app_data.dart';
 import '../../../providers/app_data.dart';
 
 enum gender {

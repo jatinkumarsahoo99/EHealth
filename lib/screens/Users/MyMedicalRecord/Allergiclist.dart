@@ -195,7 +195,8 @@ class _AllergicListListState extends State<AllergicListList> {
                                                           left: BorderSide(
                                                               color: AppData
                                                                   .kPrimaryColor,
-                                                              width: 5))),
+                                                              width: 5))
+                                              ),
                                               width: double.maxFinite,
                                               /*  margin: const EdgeInsets.only(top: 6.0),*/
 
