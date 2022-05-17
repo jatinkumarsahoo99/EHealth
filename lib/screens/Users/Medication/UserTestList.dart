@@ -153,7 +153,6 @@ class _MedicineList extends State<UserTestList> {
           setState(() {
             address = "${finder.formattedAddress}";
             cityName = finder.addressComponents[5].longName;
-
             mapK["address"] = address;
             mapK["city"] = cityName;
             widget.model.pharmacyaddress = address;
@@ -171,7 +170,7 @@ class _MedicineList extends State<UserTestList> {
           appBar: AppBar(
             centerTitle: true,
             backgroundColor: AppData.kPrimaryColor,
-            title: Text("Test List"),
+            title: Text(MyLocalizations.of(context).text("TEST_LIST")),
             actions: <Widget>[
             /*  Padding(
                 padding: const EdgeInsets.only(right: 15.0,top: 20),
@@ -205,7 +204,7 @@ class _MedicineList extends State<UserTestList> {
           ? Container(
         child: Center(
           child: Image.asset("assets/NoRecordFound.png",
-                                              // height: 25,
+            // height: 25,
                                             )
         ),
 
@@ -827,7 +826,7 @@ class _MedicineList extends State<UserTestList> {
               EdgeInsets.only(left: 35.0, right: 35.0, top: 15.0, bottom: 15.0),
           child: Text(
             // MyLocalizations.of(context).text("SIGN_BTN"),
-            "SUBMIT",
+            "Continue",
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white, fontSize: 16.0),
           ),
