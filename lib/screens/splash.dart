@@ -390,7 +390,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void navigationPage() async {
     //SharedPref sharedPref = SharedPref();
     try {
-      if (androidVersion != null && iosVersion!=null && int.tryParse((Platform.isAndroid)?androidVersion:iosVersion) > int.tryParse((Platform.isAndroid)?Const.ANDROID:Const.IOS)) {
+      if (androidVersion != null && iosVersion!=null && int.tryParse((Platform.isAndroid)?androidVersion:iosVersion)
+          > int.tryParse((Platform.isAndroid)?Const.ANDROID:Const.IOS)) {
         // log("Out login>>>>>>>");
         showDialog(
           context: context,

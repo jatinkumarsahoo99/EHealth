@@ -954,8 +954,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     });*/
 
                     showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
+                      context: context,                      builder: (BuildContext context) =>
+
                           dialogUserView(context, masterResponse.body),
                     );
 

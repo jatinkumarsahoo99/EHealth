@@ -578,26 +578,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               borderRadius: BorderRadius.circular(60),
                               child: Column(
                                 children: [
-                                  /*Image.network(
-                                    patientProfileModel
-                                            ?.body?.profileImageType ??
-                                        AppData.defaultImgUrl,
-                                    // height: 95,
-                                    height: size.height * 0.15,
-                                    width: size.width * 0.25,
-                                  ),*/
-                                  /* Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: InkWell(
-                                      onTap: () {
-                                        //_settingModalBottomSheet(context);
-                                      },
-                                      child: Icon(
-                                        Icons.edit,
-                                        color: AppData.kPrimaryColor,
-                                      ),
-                                    ),
-                                  ),*/
                                 ],
                               )),
                         ),

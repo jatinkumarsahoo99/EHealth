@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:user/scoped-models/MainModel.dart';
@@ -49,9 +47,7 @@ class _PdfViewPageState extends State<PdfViewPage> {
     print("Start download file from internet!");
     try {
       print(widget.model.pdfurl);
-      //"https://berlin2017.droidcon.cod.newthinking.net/sites/global.droidcon.cod.newthinking.net/files/media/documents/Flutter%20-%2060FPS%20UI%20of%20the%20future%20%20-%20DroidconDE%2017.pdf";
-      //final url = "https://pdfkit.org/docs/guide.pdf";
-      final url = widget.model.pdfurl/*  "https://pdfkit.org/docs/guide.pdf"*/;
+      final url = widget.model.pdfurl;
       final filename = url.substring(url.lastIndexOf("/") + 1);
       var request = await HttpClient().getUrl(Uri.parse(url));
       var response = await request.close();
