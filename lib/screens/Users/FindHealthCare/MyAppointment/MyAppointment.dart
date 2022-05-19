@@ -94,7 +94,8 @@ class _MyAppointmentState extends State<MyAppointment> {
           backgroundColor: AppData.kPrimaryColor,
           elevation: 5,
           splashColor: Colors.grey,
-        ),*/ /*
+        ),*/
+    /*
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -130,9 +131,11 @@ class _MyAppointmentState extends State<MyAppointment> {
                       ),
                       child:  Padding(
                         padding: const EdgeInsets.only(left:20.0,right: 20,top: 10,bottom: 10),
-                        child: */ /**/ /*Row(
+                        child: */ /**/
+    /*Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [*/ /**/ /*
+                          children: [*/ /**/
+    /*
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -170,7 +173,8 @@ class _MyAppointmentState extends State<MyAppointment> {
                         ),*/ /**/ /*
                       ),
                     ),
-                  ),*/ /*
+                  ),*/
+    /*
                   SizedBox(height: size.height * 0.02,),
                   DefaultTabController(
                      //isScrollable: true,

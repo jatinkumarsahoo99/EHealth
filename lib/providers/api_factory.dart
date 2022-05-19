@@ -8,7 +8,7 @@ class ApiFactory {
 
   static bool isProduction = false;
   static bool isLocal = false;
-  static String LOCAL_URL = "http://192.168.0.124:8062/nirmalyaRest/api/";
+  static String LOCAL_URL = "http://192.168.0.134:8062/nirmalyaRest/api/";
 
   static String REG_DEVICE = "https://cca.medtel.in/Ziniai/manageDeviceId";
   static String MAIN_URL = (!isLocal)
