@@ -15,6 +15,8 @@ class UserRegistrationModel{
       stateCode, districtid,cityid,
       dob,typeAbha,
       profileImageType;
+  String enteredby;
+
   String aadharNo;
   AbhaResponseModel abhaResponseModel;
   UserRegistrationModel();
@@ -76,6 +78,7 @@ class UserRegistrationModel{
       "profileImage":[this.profileImage??''],
       "abhaAuthMethod":this.typeAbha,
       "aadharNo":this.aadharNo,
+      "enteredby":this.enteredby,
       "resp":abhaResponseModel.toJson()
     };
     return param;

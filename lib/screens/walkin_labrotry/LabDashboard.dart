@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -185,9 +186,10 @@ class _LabDashboardState extends State<LabDashboard> {
                         _buildTileblue(
                           icon:"assets/images/registerpatient.png",
                           fun: () {
+                            chooseAbha(context);
                             //AppData.showInSnackBar(context, "Coming soon");
                             // Navigator.pushNamed(context, "/medicalrecordpage");
-                            Navigator.pushNamed(context, "/walkRegList");
+                           // Navigator.pushNamed(context, "/walkRegList");
                           },
                           color: AppData.BG2BLUE,
                           bordercolor: AppData.BG2BLUE,
@@ -1439,4 +1441,66 @@ class _LabDashboardState extends State<LabDashboard> {
         ),
       ),
     );
-  }}
+  }
+
+
+  chooseAbha(BuildContext context) {
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                //title: const Text("Is it your details?"),
+                contentPadding: EdgeInsets.only(top: 18, left: 18, right: 18),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                //contentPadding: EdgeInsets.only(top: 10.0),
+                content: Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          title: Text("With ABHA Id"),
+                          onTap: () {
+                           /* widget.model.apntUserType =
+                                Const.HEALTH_SCREENING_APNT;*/
+                            log("LOGIN RESPONSE>>>"+jsonEncode(widget.model.loginResponse1.toJson()));
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, "/aadharRegistrationLab");
+                            // AppData.showInSnackBar(context,"hi");
+                          },
+                        ),
+                        Divider(),
+                        ListTile(
+                          title: Text("Without ABHA Id"),
+                          onTap: () {
+                           // widget.model.apntUserType = Const.HEALTH_CHKUP_APNT;
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, "/walkRegList");
+                          },
+                        ),
+                        Divider(),
+
+                        MaterialButton(
+                          child: Text(
+                            MyLocalizations.of(context).text("CANCEL"),
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        });
+  }
+
+}

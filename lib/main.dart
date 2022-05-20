@@ -18,6 +18,11 @@ import 'package:user/screens/AadharRegistration/AbhaRegForm.dart';
 import 'package:user/screens/AadharRegistration/AdharOTPPinView.dart';
 import 'package:user/screens/AadharRegistration/PANRegistration/AbhaPAN.dart';
 import 'package:user/screens/AadharRegistration/PhoneOTPPinView.dart';
+import 'package:user/screens/AbhaRegistrationLab/AadharRegistrationLab.dart';
+import 'package:user/screens/AbhaRegistrationLab/AbhaAutoRegFormLab.dart';
+import 'package:user/screens/AbhaRegistrationLab/AbhaMobileVerificationLab.dart';
+import 'package:user/screens/AbhaRegistrationLab/AdharOTPPinViewLab.dart';
+import 'package:user/screens/AbhaRegistrationLab/PhoneOTPViewLab.dart';
 import 'package:user/screens/Admin/Admin.dart';
 import 'package:user/screens/Ambulance/Dashboard/AcceptAmbulance.dart';
 import 'package:user/screens/Ambulance/Dashboard/AllAmbulance.dart';
@@ -1336,6 +1341,21 @@ class _MyAppState extends State<MyApp> {
                 model: _model,
               ),
               '/phoneOtp': (context) => PhoneOTPPinView(
+                model: _model,
+              ),
+              '/aadharRegistrationLab': (context) => AadharRegistrationLab(
+                model: _model,
+              ),
+              '/aadharOTPViewLab': (context) => AdharOTPPinViewLab(
+                model: _model,
+              ),
+              '/abhaMobileLab': (context) => AbhaMobileVerificationLab(
+                model: _model,
+              ),
+             '/phoneOTPLab': (context) => PhoneOTPViewLab(
+                model: _model,
+              ),
+            '/finalAbhaLab': (context) => AbhaAutoRegFormLab(
                 model: _model,
               ),
 

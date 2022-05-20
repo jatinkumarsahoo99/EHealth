@@ -1405,7 +1405,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                     */ /* Positioned(
+                     */
+    /* Positioned(
                         right: 10.0,
                         child: GestureDetector(
                           onTap: () {
@@ -1420,7 +1421,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                      ),*/ /*
+                      ),*/
+    /*
                    Align(
                   alignment: Alignment.center,
                     child: Text(
@@ -1452,7 +1454,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   "Yes", style: TextStyle(color: AppData.matruColor),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context,organisation */ /*"/doctorsignupform2"*/ /*);
+                  Navigator.pushNamed(context,organisation */
+    /*"/doctorsignupform2"*/ /*);
 
 
                 },

@@ -499,6 +499,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         //centerTitle: true,
         // iconTheme: IconThemeData(color: AppData.kPrimaryColor,),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.download_outlined),
+        onPressed: (){
+AppData.launchURL("https://ehealthsystem.com/user/mobile-ehealthcard-download-pdf?idd="+id);
+        },
+      ),
       body: patientProfileModel == null ?  isdata != true ?
       Center(
         child: Column(

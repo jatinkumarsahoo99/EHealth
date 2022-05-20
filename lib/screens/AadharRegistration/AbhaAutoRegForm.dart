@@ -105,7 +105,10 @@ class _AbhaAutoRegFormState extends State<AbhaAutoRegForm> {
                 ? "Male"
                 : "Female";
             userModel.abhaResponseModel = abhaResponseModel;
-            userModel.title == "";
+            userModel.title = "";
+            userModel.enteredby = (widget.model.loginResponse1 != null)
+                ? widget.model.loginResponse1.body.user
+                : null;
 
             // dev.log(">>>>>>>>PRINT dev.logO>>>>>>\n\n\n\n\n\n\n\n\n\n\n\n\n" + jsonEncode(abhaResponseModel.toJson())+"\n\n\n\n\n\n\n\n\n\n\n\n\n");
             dev.log(">>>>>>>>PRINT AHBHH>>>>>>\n\n\n\n\n\n\n\n\n\n\n\n\n" +
@@ -123,6 +126,7 @@ class _AbhaAutoRegFormState extends State<AbhaAutoRegForm> {
 
   postOurServer(UserRegistrationModel userModel) {
     MyWidgets.showLoading(context);
+    log("\n\n>>>>>"+jsonEncode(userModel.toJson())+"\n\n");
     widget.model.POSTMETHOD(
         api: ApiFactory.USER_REGISTRATION,
         json: userModel.toJson(),
@@ -204,32 +208,30 @@ class _AbhaAutoRegFormState extends State<AbhaAutoRegForm> {
                         Container(
                           height: 300,
                           // margin: EdgeInsets.only(left: 25,bottom: 15),
-                          padding: EdgeInsets.only(left: 25,bottom: 15),
+                          padding: EdgeInsets.only(left: 25, bottom: 15),
                           child: Center(
                             child: Text(
                               "Congratulation",
                               style: TextStyle(
-                                // color: Color(0xFF4f0d13),
-                                color: Color(0xFFc91430),
-                                fontSize: 24,
-                              fontFamily: "sans-serif-thin",
-                              // fontFamily: "Gujarati Sangam MN",
-                              shadows: [
-                                Shadow(
-                                  color: Color(0xFF4f0d13).withOpacity(0.6),
-                                  offset: Offset(5.0, 5.0),
-                                  blurRadius: 10.0,
-                                ),
-                              ],
-                              fontWeight: FontWeight.w600
-                              /*  foreground: Paint()
+                                  // color: Color(0xFF4f0d13),
+                                  color: Color(0xFFc91430),
+                                  fontSize: 24,
+                                  fontFamily: "sans-serif-thin",
+                                  // fontFamily: "Gujarati Sangam MN",
+                                  shadows: [
+                                    Shadow(
+                                      color: Color(0xFF4f0d13).withOpacity(0.6),
+                                      offset: Offset(5.0, 5.0),
+                                      blurRadius: 10.0,
+                                    ),
+                                  ],
+                                  fontWeight: FontWeight.w600
+                                  /*  foreground: Paint()
                                   ..style = PaintingStyle.stroke
                                   ..strokeWidth = 1
                                   ..color = Colors.blue[700],*/
 
-
-                              ),
-
+                                  ),
                             ),
                           ),
                         )
