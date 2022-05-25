@@ -49,6 +49,7 @@ class InsuranceFormNew extends StatefulWidget {
   static KeyvalueModel bloodgroupModel = null;
   static KeyvalueModel blockModel = null;
   static KeyvalueModel genderModel = null;
+  static KeyvalueModel genderModel2 = null;
   static KeyvalueModel relationmodel = null;
   static KeyvalueModel materialmodel = null;
   static KeyvalueModel titleModel = null;
@@ -56,6 +57,7 @@ class InsuranceFormNew extends StatefulWidget {
   static KeyvalueModel insurancepincodemodel = null;
   static KeyvalueModel insurancemaritalmodel = null;
   static KeyvalueModel insuranceoccupationmodel = null;
+  static KeyvalueModel insuranceoccupationmodel1 = null;
   static List<KeyvalueModel> UserType1 = [];
 
   InsuranceFormNew({
@@ -80,6 +82,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
   bool isChecked = false;
   bool isTissueChecked = false;
   DateTime selectedDate = DateTime.now();
+   DateTime selectedDate1 = DateTime.now();
   PayMode1 payMode1 = PayMode1.cash;
   ProfileModel patientProfileModel;
   EmergencyMessageModel emergencyMessageModel = EmergencyMessageModel();
@@ -165,6 +168,8 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
   TextEditingController stdob = TextEditingController();
   TextEditingController nomdob = TextEditingController();
   TextEditingController pincode = TextEditingController();
+  TextEditingController fromdtTxt = TextEditingController();
+  TextEditingController todtTxt = TextEditingController();
   List<bool> error = [false, false, false, false, false, false];
   bool _isSignUpLoading = false;
 
@@ -744,7 +749,12 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
                 Text("*  Aditya Birla Health Insurance",style: TextStyle(
                     fontSize: 20,color: Colors.blue),),
                 SizedBox(height: 10),
-                formFieldPassPortno(0,"Customer Id (UHID)"),
+              Form(
+                 key: _formKey,
+                  autovalidate: _autovalidate,
+                child: 
+                Column(children: [
+                  formFieldPassPortno(0,"Customer Id (UHID)"),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 0),
@@ -900,8 +910,6 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
                   ),
                 ),
 
-
-
                 SizedBox(height: 8),
                 formFieldAadhaaerno(7, "Uid No"),
                 Padding(
@@ -968,8 +976,10 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
                 panNo(14,"Annual Income", /*fnode13, fnode14*/),
                 SizedBox(height: 8),
                 panNo(15,"Remarks", /*fnode13, fnode14*/),
-           /*     SizedBox(height: 8),
-                panNo(16,"remarks", *//*fnode13, fnode14*//*),*/
+              SizedBox(height: 8),
+              fromDt(),
+              toDt(),
+               // panNo(16,"remarks", *//*fnode13, fnode14*//*),*/
                 SizedBox(height: 8),
                 homeAddressLine1(17,"Home Address Line1", /*fnode13, fnode14*/),
                 SizedBox(height: 8),
@@ -995,7 +1005,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
                 SizedBox(height: 8),
                 homeAddressLine1(28,"Mailing  Address Line2", /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                homeAddressLine1(29,"mailing Address Line3", /*fnode13, fnode14*/),
+                homeAddressLine1(29,"Mailing Address Line3", /*fnode13, fnode14*/),
                 SizedBox(height: 8),
                 panNo(30,"Mailing PinCode", /*fnode13, fnode14*/),
                 SizedBox(height: 8),
@@ -1083,6 +1093,9 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
 
 */
                 SizedBox(height: 8),
+                ],)
+              ),
+                
                 formField1(12, MyLocalizations.of(context).text("DOCUMENT1")),
                 SizedBox(
                   height: 8,
@@ -2164,7 +2177,29 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
                     45,
                     "Last Name"),
                 SizedBox(height: 8),
-                dobBirth(),
+                dob2('Date of Birth'),
+                 Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 0),
+                  child: SizedBox(
+                    height: 58,
+                    child:DropDown.networkDropdown1(
+                      //"Gender"
+                        MyLocalizations.of(context)
+                            .text("GENDER"),
+                        ApiFactory.GENDER_API,
+                        "gender",
+                        Icons.wc_outlined,
+                        23.0, (KeyvalueModel data) {
+                      setState(() {
+                        print(ApiFactory.GENDER_API);
+                        InsuranceFormNew.genderModel2 = data;
+                        //userModel.gender = data.key;
+                        // UserSignUpForm.cityModel = null;
+                      });
+                    }),
+                  ),
+                ),
                 //panNo(37,"Relation Code"),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -2220,7 +2255,31 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
                 SizedBox(height: 8),
                 height(49,"weight"),
                 SizedBox(height: 8),
-                educationalQualification(50,"Occupation"),
+                // educationalQualification(50,"Occupation"),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 0),
+                  child: SizedBox(
+                    height: 58,
+                    child:DropDown.networkDropdown1(
+                        "Occupation",
+                        ApiFactory.INSURANCE_OCCUPATION,
+                        "insuranceoccupation",
+                        Icons.wc_outlined,
+                        23.0, (KeyvalueModel data) {
+                      setState(() {
+                        print(ApiFactory.INSURANCE_OCCUPATION);
+                        InsuranceFormNew.insuranceoccupationmodel1 = data;
+                      /*  patientProfileModel.body.mstausid =
+                            data.key;
+                        patientProfileModel.body.maritialstatus =
+                            data.name;*/
+                        //userModel.gender = data.key;
+                        // UserSignUpForm.cityModel = null;
+                      });
+                    }),
+                  ),
+                ),
                 SizedBox(height: 8),
                 formField1(51,"PrimaryMember"),
               ],
@@ -2605,6 +2664,103 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
       ),
     );
   }
+ Future<Null> _selectDate(BuildContext context, String comeFrom) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        locale: Locale("en"),
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+        lastDate:
+            DateTime.now().add(Duration(days: 276))); //18 years is 6570 days
+    //if (picked != null && picked != selectedDate)
+    setState(() {
+      final df = new DateFormat('dd/MM/yyyy');
+      selectedDate = picked;
+      selectedDate1 = picked;
+
+      switch (comeFrom) {
+        case "fromdate":
+          fromdtTxt.value = TextEditingValue(text: df.format(selectedDate));
+          break;
+         case "todate":
+          todtTxt.value = TextEditingValue(text: df.format(selectedDate1));
+          break;
+      }
+    });
+  }
+
+  
+
+   Widget fromDt() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+      child: GestureDetector(
+        onTap: () => _selectDate(context, "fromdate"),
+        child: AbsorbPointer(
+          child: Container(
+            alignment: Alignment.center,
+            height: 50,
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Colors.black, width: 0.3)),
+            child: TextFormField(
+              controller: fromdtTxt,
+              keyboardType: TextInputType.datetime,
+              textAlign: TextAlign.left,
+              textAlignVertical: TextAlignVertical.center,
+              decoration: InputDecoration(
+                hintText: "Start date",
+                border: InputBorder.none,
+                suffixIcon: Icon(
+                  Icons.calendar_today,
+                  size: 18,
+                  color: AppData.kPrimaryColor,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+   Widget toDt() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+      child: GestureDetector(
+        onTap: () => _selectDate(context, "todate"),
+        child: AbsorbPointer(
+          child: Container(
+            alignment: Alignment.center,
+            height: 50,
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Colors.black, width: 0.3)),
+            child: TextFormField(
+              controller:todtTxt,
+              keyboardType: TextInputType.datetime,
+              textAlign: TextAlign.left,
+              textAlignVertical: TextAlignVertical.center,
+              decoration: InputDecoration(
+                hintText: "End date",
+                border: InputBorder.none,
+                suffixIcon: Icon(
+                  Icons.calendar_today,
+                  size: 18,
+                  color: AppData.kPrimaryColor,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget panNo(
       int index,
       String hint,
@@ -3117,6 +3273,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
         text: MyLocalizations.of(context).text("SUBMIT"),
         context: context,
         fun: () {
+          validate();
          // Navigator.pushNamed(context, "/dashboard");
 
           /*if (textEditingController[0].text == "" ||
@@ -3275,6 +3432,354 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
         });
   }
 
+  validate() async{
+    _formKey.currentState.validate();
+     if (textEditingController[0].text == "" ||
+              textEditingController[0].text == null) {
+            AppData.showInSnackBar(context, "Please enter customer id(UHID)");
+
+          } else if (InsuranceFormNew.insurancetitlemodel == null) {
+          AppData.showInSnackBar(context, "please select title");
+
+          }else if (textEditingController[1].text == "" ||
+              textEditingController[1].text == null) {
+            AppData.showInSnackBar(context, "Please enter first name");
+          } else if (textEditingController[1].text != "" &&
+              textEditingController[1].text.length <= 2) {
+            AppData.showInSnackBar(context, "Please enter a valid  name");
+
+          }else if (textEditingController[3].text == "" ||
+              textEditingController[3].text == null) {
+            AppData.showInSnackBar(context, "Please enter last name");
+
+
+          }else if (stdob.text == "" ||
+              stdob.text == null) {
+            AppData.showInSnackBar(context, "Please enter date of birth");
+
+          } else if (InsuranceFormNew.genderModel == null) {
+            AppData.showInSnackBar(context, "please select gender");
+
+          } else if (textEditingController[4].text == "" ||
+              textEditingController[4].text == null) {
+            AppData.showInSnackBar(context, "Please enter education qualification");
+
+
+          } else if (textEditingController[5].text == "" ||
+              textEditingController[5].text == null) {
+            AppData.showInSnackBar(context, "Please enter email id");
+
+
+          } else if (pincode.text == "" ||
+              pincode.text == null) {
+            AppData.showInSnackBar(context, "Please enter pin code");
+
+          } else if (textEditingController[7].text == "" ||
+              textEditingController[7].text == null) {
+            AppData.showInSnackBar(context, "Please enter uid number");
+
+          } else if (InsuranceFormNew.insurancemaritalmodel == "" ||
+              InsuranceFormNew.insurancemaritalmodel == null) {
+            AppData.showInSnackBar(context, "Please enter marriatial status");
+
+          }else if (InsuranceFormNew.insuranceoccupationmodel == "" ||
+              InsuranceFormNew.insuranceoccupationmodel == null) {
+            AppData.showInSnackBar(context, "Please enter occupation");
+
+          }         
+           else if (textEditingController[9].text == "" ||
+              textEditingController[9].text == null) {
+            AppData.showInSnackBar(context, "Please enter contact mobile no");
+
+          } else if (textEditingController[10].text == "" ||
+              textEditingController[10].text == null) {
+            AppData.showInSnackBar(context, "Please enter landline number");
+
+          } else if (textEditingController[11].text == "" ||
+              textEditingController[11].text == null) {
+            AppData.showInSnackBar(context, "Please enter pan number");
+
+          } else if (textEditingController[12].text == "" ||
+              textEditingController[12].text == null) {
+            AppData.showInSnackBar(context, "Please enter passport number");
+
+          } else if (textEditingController[13].text == "" ||
+              textEditingController[13].text == null) {
+            AppData.showInSnackBar(context, "Please enter contact person");
+
+          } 
+          // else if (textEditingController[14].text == "" ||
+          //     textEditingController[14].text == null) {
+          //   AppData.showInSnackBar(context, "Please enter annual income");
+
+          //    } 
+          //    else if (textEditingController[15].text == "" ||
+          //     textEditingController[15].text == null) {
+          //   AppData.showInSnackBar(context, "Please enter remarks");
+          // }
+          else if (fromdtTxt.text == "" ||
+              fromdtTxt.text == null) {
+            AppData.showInSnackBar(context, "Please enter start date");
+          }         
+          else if (textEditingController[20].text == "" ||
+              textEditingController[20].text == null) {
+            AppData.showInSnackBar(context, "Please enter home pincode");
+          }
+          else if (textEditingController[42].text == "" ||
+              textEditingController[42].text == null) {
+            AppData.showInSnackBar(context, "Please enter member no");
+          }
+           else if (InsuranceFormNew.titleModel == "" ||
+             InsuranceFormNew.titleModel == null) {
+            AppData.showInSnackBar(context, "Please select nominee title");
+          }
+          else if (textEditingController[43].text == "" ||
+              textEditingController[43].text == null) {
+            AppData.showInSnackBar(context, "Please enter nominee first name");
+          }
+          else if (textEditingController[45].text == "" ||
+              textEditingController[45].text == null) {
+            AppData.showInSnackBar(context, "Please enter nominee last name");
+          }
+          else if (InsuranceFormNew.genderModel2 == "" ||
+              InsuranceFormNew.genderModel2 == null) {
+            AppData.showInSnackBar(context, "Please enter nominee gender");
+          }
+          else if (nomdob.text == "" ||
+              nomdob.text == null) {
+            AppData.showInSnackBar(context, "Please enter nominee date of birth");
+          }
+           else if (InsuranceFormNew.relationmodel == "" ||
+              InsuranceFormNew.relationmodel == null) {
+            AppData.showInSnackBar(context, "Please enter nominee relation");
+          }
+           else if (InsuranceFormNew.materialmodel == "" ||
+              InsuranceFormNew.materialmodel == null) {
+            AppData.showInSnackBar(context, "Please enter nominee maritial status");
+          }
+           else if (InsuranceFormNew.insuranceoccupationmodel1 == "" ||
+              InsuranceFormNew.insuranceoccupationmodel1 == null) {
+            AppData.showInSnackBar(context, "Please enter nominee occupation");
+          }
+
+          else{
+            print("form submit");
+             var postData = 
+             {
+    "ClientCreation": {
+    "Member_Customer_ID": textEditingController[0].text,
+    "salutation": InsuranceFormNew.insurancetitlemodel.name,
+    "firstName": textEditingController[1].text,
+    "middleName": textEditingController[2].text,
+    "lastName": textEditingController[3].text,
+    "dateofBirth": stdob,
+    "gender": InsuranceFormNew.genderModel.name,
+    "educationalQualification": textEditingController[4].text,
+    "pinCode": pincode.text,
+    "uidNo": textEditingController[7].text,
+    "maritalStatus": InsuranceFormNew.insurancemaritalmodel.name,
+    "nationality": "Indian",
+    "occupation": InsuranceFormNew.insuranceoccupationmodel.key,
+    "primaryEmailID": textEditingController[5].text,
+    "contactMobileNo": textEditingController[9].text,
+    "stdLandlineNo": textEditingController[10].text,
+    "panNo": textEditingController[11].text,
+    "passportNumber": textEditingController[12].text,
+    "contactPerson": textEditingController[13].text,
+    "annualIncome": textEditingController[14].text,
+    "remarks": textEditingController[15].text,
+    "startDate": fromdtTxt.text,
+    "endDate": todtTxt.text,
+    "IdProof": "Adhaar Card", //textEditingController[7]
+    "residenceProof": null, 
+    "ageProof": null,
+    "others": null,
+    "homeAddressLine1": textEditingController[17].text,
+    "homeAddressLine2": textEditingController[18].text,
+    "homeAddressLine3": textEditingController[19].text,
+    "homePinCode": textEditingController[20].text,
+    "homeArea": textEditingController[21].text,
+    "homeContactMobileNo": textEditingController[22].text,
+    "homeContactMobileNo2": textEditingController[23].text,
+    "homeSTDLandlineNo": textEditingController[24].text,
+    "homeFaxNo": textEditingController[25].text,
+    "sameAsHomeAddress": "1",
+    "mailingAddressLine1": textEditingController[27].text,
+    "mailingAddressLine2": textEditingController[28].text,
+    "mailingAddressLine3": textEditingController[29].text,
+    "mailingPinCode": textEditingController[30].text,
+    "mailingArea": textEditingController[31].text,
+    "mailingContactMobileNo": textEditingController[32].text,
+    "mailingContactMobileNo2": textEditingController[33].text,
+    "mailingSTDLandlineNo": textEditingController[12].text,
+    "mailingSTDLandlineNo2": textEditingController[34].text,
+    "mailingFaxNo": textEditingController[35].text,
+    "bankAccountType": textEditingController[36].text,
+    "bankAccountNo": textEditingController[37].text,
+    "ifscCode": textEditingController[38].text,
+    "GSTIN": textEditingController[39].text,
+    "GSTRegistrationStatus": "Consumers", //textEditingController[40]
+    "IsEIAavailable": "0",
+    "ApplyEIA": "0",
+    "EIAAccountNo": textEditingController[41].text,
+    "EIAWith": "0",
+    "AccountType": null,
+    "AddressProof": null,
+    "DOBProof": null,
+    "IdentityProof": null
+  },
+    "PolicyCreationRequest": {
+    "Quotation_Number": "",
+    "MasterPolicyNumber": "62-21-00113-00-00",
+    "GroupID": "Grp001",
+    "Product_Code": "4000",
+    "intermediaryCode": "ABH1139495",
+    "AutoRenewal": null,
+    "intermediaryBranchCode": "10MHMUM03",
+    "agentSignatureDate": null,
+    "Customer_Signature_Date": null,
+    "businessSourceChannel": null,
+    "AssignPolicy": "0",
+    "AssigneeName": null,
+    "leadID": "0",
+    "Source_Name": "HDFC_NETB",
+    "SPID": null,
+    "TCN": null,
+    "CRTNO": null,
+    "RefCode1": null,
+    "RefCode2": null,
+    "Employee_Number": null,
+    "enumIsEmployeeDiscount": null,
+    "QuoteDate": null,
+    "IsPayment": "0",
+    "PaymentMode": null,
+    "PolicyproductComponents": [
+      {
+        "PlanCode": "4112",
+        "SumInsured": "5000000",
+        "SchemeCode": "4112000003"
+      }
+    ]
+  },
+    "MemObj": {
+    "Member": [
+      {
+        "MemberNo":  textEditingController[42].text,
+        "Salutation": InsuranceFormNew.titleModel.name,
+        "First_Name": textEditingController[43].text,
+        "Middle_Name": textEditingController[44].text,
+        "Last_Name": textEditingController[45].text,
+        "Gender": InsuranceFormNew.genderModel2.name,
+        "DateOfBirth": nomdob.text,
+        "Relation_Code": InsuranceFormNew.relationmodel.key,
+        "Marital_Status": InsuranceFormNew.materialmodel.name,
+        "height":textEditingController[48].text,
+        "weight":textEditingController[49].text,
+        "occupation": InsuranceFormNew.insuranceoccupationmodel1.key,
+        "PrimaryMember": "N", //textEditingController[51]
+        "MemberproductComponents": [
+          {
+            "PlanCode": "4112",
+            "MemberQuestionDetails": [
+              {
+                "QuestionCode": null,
+                "Answer": null,
+                "Remarks": null
+              }
+            ]
+          }
+        ],
+        "MemberPED": [
+          {
+            "PEDCode": "",
+            "Remarks": ""
+          }
+        ],
+        "exactDiagnosis": null,
+        "dateOfDiagnosis": null,
+        "lastDateConsultation": null,
+        "detailsOfTreatmentGiven": null,
+        "doctorName": null,
+        "hospitalName": null,
+        "phoneNumberHosital": null,
+        "Nominee_First_Name": "ffffffffffff",
+        "Nominee_Last_Name": "dsfssd",
+        "Nominee_Contact_Number": "7875445454",
+        "Nominee_Home_Address": null,
+        "Nominee_Relationship_Code": "R003"
+      },
+      {
+        "MemberNo": "2",
+        "Salutation": "Mrs",
+        "First_Name": "Sakshi",
+        "Middle_Name": null,
+        "Last_Name": "Dhoni",
+        "Gender": "F",
+        "DateOfBirth": "08/01/1999",
+        "Relation_Code": "R001",
+        "Marital_Status": "Married",
+        "height": "0.00",
+        "weight": "0",
+        "occupation": "O553",
+        "SumInsured": "0",
+        "PrimaryMember": "N",
+        "MemberproductComponents": [
+          {
+            "PlanCode": "4112",
+            "SumInsured": "5000000",
+            "MemberQuestionDetails": [
+              {
+                "QuestionCode": null,
+                "Answer": null,
+                "Remarks": null
+              }
+            ]
+          }
+        ],
+        "MemberPED": [
+          {
+            "PEDCode": null,
+            "Remarks": null
+          }
+        ],
+        "exactDiagnosis": null,
+        "dateOfDiagnosis": null,
+        "lastDateConsultation": null,
+        "detailsOfTreatmentGiven": null,
+        "doctorName": null,
+        "hospitalName": null,
+        "phoneNumberHosital": null,
+        "Nominee_First_Name": "fffffffffffffffff",
+        "Nominee_Last_Name": "ddgds",
+        "Nominee_Contact_Number": "7878754545",
+        "Nominee_Home_Address": null,
+        "Nominee_Relationship_Code": "R004"
+      }
+    ]
+  },
+    "ReceiptCreation": {
+    
+  }
+
+          };
+     MyWidgets.showLoading(context);
+      widget.model.POSTMETHOD(
+          api: 'https://esbpre.adityabirlahealth.com/ABHICL_NB/Service1.svc/GFB',
+          json: postData,
+          fun: (Map<String, dynamic> map) {
+            Navigator.pop(context);
+            print("Response>>>>"+jsonEncode(map) );
+             String msg = map["message"].toString()??"NOT RESPONSE GET";
+            String code = map["code"].toString();
+            if (code == 200) {
+              popup(context,msg );
+            } else {
+              AppData.showInSnackBar(context, msg);
+            }
+          });
+
+  }
+  }
   /* saveDb() {
     Map<String, dynamic> map = {
       //"regNo": loginRes.ashadtls[0].id,
@@ -3743,6 +4248,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
       ),
     );
   }
+ 
   Widget dob2(String hint) {
     return Padding(
       //padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -3759,18 +4265,10 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
               Padding(
                 padding: const EdgeInsets.only(left: 9,right: 9),
                 child: Container(
-                  decoration: BoxDecoration(
-                    // color: AppData.kPrimaryLightColor,
-                    // borderRadius: BorderRadius.circular(29),
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 1.0,
-
-                        color: Colors.grey,
-                      ),
-                      // border: Border.all(color: Colors.black, width: 0.3)
-                    ),
-                  ),
+                   decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Colors.black, width: 0.3)),
                   // margin: EdgeInsets.symmetric(vertical: 10),
                   alignment: Alignment.center,
                   height: 50,
