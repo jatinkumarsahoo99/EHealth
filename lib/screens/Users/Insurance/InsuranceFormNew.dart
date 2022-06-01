@@ -31,9 +31,12 @@ import 'package:user/providers/api_factory.dart';
 import 'package:user/scoped-models/MainModel.dart';
 import 'package:user/widgets/MyWidget.dart';
 import 'package:user/widgets/text_field_container.dart';
+import 'package:xml2json/xml2json.dart';
 import '../../../localization/localizations.dart';
 import '../../../models/KeyvalueModel.dart';
 import '../../../providers/app_data.dart';
+import 'package:http/http.dart' as http;
+
 
 // ignore: must_be_immutable
 class InsuranceFormNew extends StatefulWidget {
@@ -102,6 +105,9 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
   File selectFile1;
   File selectFile2;
   File selectFile3;
+  final ymd = new DateFormat('yyyy-MM-dd');
+  final mdy = new DateFormat('MM/dd/yyyy');
+  bool value = false;
   List<TextEditingController> textEditingController = [
     new TextEditingController(),
     new TextEditingController(),
@@ -470,6 +476,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
         selectedStartDate = picked;
         error[2] = false;
         nomdob.value = TextEditingValue(text: df.format(picked));
+        nomdob.text = mdy.format(picked);
       });
   }
 
@@ -967,29 +974,29 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
                 SizedBox(height: 8),
                 stdLandlineNo(10,"Landline No", /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                panNo(11,"PAN No", /*fnode13, fnode14*/),
+                panNo(11,"PAN No",TextInputType.number  /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                panNo(12,"Passport Number", /*fnode13, fnode14*/),
+                panNo(12,"Passport Number", TextInputType.number /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                panNo(13,"Contact Person", /*fnode13, fnode14*/),
+                panNo(13,"Contact Person", TextInputType.text /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                panNo(14,"Annual Income", /*fnode13, fnode14*/),
+                panNo(14,"Annual Income", TextInputType.number /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                panNo(15,"Remarks", /*fnode13, fnode14*/),
+                panNo(15,"Remarks", TextInputType.text /*fnode13, fnode14*/),
               SizedBox(height: 8),
               fromDt(),
               toDt(),
                // panNo(16,"remarks", *//*fnode13, fnode14*//*),*/
                 SizedBox(height: 8),
-                homeAddressLine1(17,"Home Address Line1", /*fnode13, fnode14*/),
+                homeAddressLine1(17,"Home Address Line1", TextInputType.text, /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                homeAddressLine1(18,"Home Address Line2", /*fnode13, fnode14*/),
+                homeAddressLine1(18,"Home Address Line2", TextInputType.text, /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                homeAddressLine1(19,"Home Address Line3", /*fnode13, fnode14*/),
+                homeAddressLine1(19,"Home Address Line3", TextInputType.text, /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                panNo(20,"Home PinCode", /*fnode13, fnode14*/),
+                panNo(20,"Home PinCode", TextInputType.number /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                homeAddressLine1(21,"Home Area", /*fnode13, fnode14*/),
+                homeAddressLine1(21,"Home Area",TextInputType.text /*fnode13, fnode14*/),
                 SizedBox(height: 8),
                 formFieldPhoneNo(22,"Home Contact MobileNo", /*fnode13, fnode14*/),
                 SizedBox(height: 8),
@@ -997,19 +1004,46 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
                 SizedBox(height: 8),
                 stdLandlineNo(24,"Home STD Landline No", /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                homeAddressLine1(25,"Home Fax No", /*fnode13, fnode14*/),
+                homeAddressLine1(25,"Home Fax No", TextInputType.number /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                homeAddressLine1(26,"Same As Home Address", /*fnode13, fnode14*/),
+                Row(
+                  children: [
+                    Checkbox(
+                              value: this.value,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  this.value = value;
+                                  if(this.value == true){
+                                  textEditingController[27].text=textEditingController[17].text;
+                                  textEditingController[28].text=textEditingController[18].text;
+                                  textEditingController[29].text=textEditingController[19].text;
+                                  textEditingController[30].text=textEditingController[20].text;
+                                  textEditingController[31].text=textEditingController[21].text;
+                                  }
+                                  else{
+                                  textEditingController[27].text="";
+                                  textEditingController[28].text="";
+                                  textEditingController[29].text="";
+                                  textEditingController[30].text="";
+                                  textEditingController[31].text="";
+                                  }
+                                 
+                                });
+                              }),
+                              Text('Same As Home Address')
+                  ],
+                ),
+                // homeAddressLine1(26,"Same As Home Address",TextInputType.text, /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                homeAddressLine1(27,"Mailing Address Line1", /*fnode13, fnode14*/),
+                homeAddressLine1(27,"Mailing Address Line1", TextInputType.text, /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                homeAddressLine1(28,"Mailing  Address Line2", /*fnode13, fnode14*/),
+                homeAddressLine1(28,"Mailing  Address Line2",TextInputType.text, /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                homeAddressLine1(29,"Mailing Address Line3", /*fnode13, fnode14*/),
+                homeAddressLine1(29,"Mailing Address Line3", TextInputType.text, /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                panNo(30,"Mailing PinCode", /*fnode13, fnode14*/),
+                panNo(30,"Mailing PinCode", TextInputType.number /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                homeAddressLine1(31,"Mailing Area", /*fnode13, fnode14*/),
+                homeAddressLine1(31,"Mailing Area",TextInputType.text, /*fnode13, fnode14*/),
                 SizedBox(height: 8),
                 formFieldPhoneNo(32,"Mailing Contact Mobile No", /*fnode13, fnode14*/),
                 SizedBox(height: 8),
@@ -1019,19 +1053,21 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
                 SizedBox(height: 8),
                 stdLandlineNo(34,"Mailing STD Landline No2", /*fnode13, fnode14*/),
                 SizedBox(height: 8),
-                homeAddressLine1(35,"Mailing Fax No"),
+                homeAddressLine1(35,"Mailing Fax No",TextInputType.number),
                 SizedBox(height: 8),
-                homeAddressLine1(36,"Bank Account Type"),
+                homeAddressLine1(36,"Bank Account Type", TextInputType.text,),
                 SizedBox(height: 8),
-                panNo(37,"Bank Account No"),
+                panNo(37,"Bank Account No", TextInputType.number),
                 SizedBox(height: 8),
-                panNo(38,"IFSC Code"),
+                panNo(38,"IFSC Code", TextInputType.text),
                 SizedBox(height: 8),
                 formFieldPinno(39,"GST IN"),
                 SizedBox(height: 8),
                 formFieldPinno(40,"GST Registration Status"),
                 SizedBox(height: 8),
-                panNo(41,"EIA AccountNo"),
+                panNo(41,"EIA AccountNo", TextInputType.number),
+                 SizedBox(height: 8),
+                panNo(53,"Sum Insured", TextInputType.number),
                /* Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -2114,6 +2150,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
     textEditingController[49].text = "";
     textEditingController[50].text = "";
     textEditingController[51].text = "";
+    textEditingController[52].text = "";
     InsuranceFormNew.relationmodel = null;
 
     return AlertDialog(
@@ -2132,7 +2169,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
                 SizedBox(
                   height: 8,
                 ),
-                panNo(42,"Member No"),
+                panNo(42,"Member No", TextInputType.number),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -2177,6 +2214,8 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
                     45,
                     "Last Name"),
                 SizedBox(height: 8),
+                 panNo(52,"Contact No.", TextInputType.number),
+                  SizedBox(height: 8),
                 dob2('Date of Birth'),
                  Padding(
                   padding: const EdgeInsets.symmetric(
@@ -2680,10 +2719,11 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
 
       switch (comeFrom) {
         case "fromdate":
-          fromdtTxt.value = TextEditingValue(text: df.format(selectedDate));
+          fromdtTxt.value = TextEditingValue(text: ymd.format(selectedDate));
+          print(fromdtTxt.text);
           break;
          case "todate":
-          todtTxt.value = TextEditingValue(text: df.format(selectedDate1));
+          todtTxt.value = TextEditingValue(text: ymd.format(selectedDate1));
           break;
       }
     });
@@ -2764,6 +2804,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
   Widget panNo(
       int index,
       String hint,
+      TextInputType input
       ) {
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -2794,7 +2835,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
             ),
             controller: textEditingController[index],
             textInputAction: TextInputAction.done,
-            keyboardType: TextInputType.number,
+            keyboardType: input,
             //focusNode: currentfn,
             inputFormatters: [
               //UpperCaseTextFormatter(),
@@ -2878,6 +2919,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
   Widget homeAddressLine1(
       int index,
       String hint,
+      TextInputType input
       ) {
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -2908,7 +2950,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
             ),
             controller: textEditingController[index],
             textInputAction: TextInputAction.done,
-            keyboardType: TextInputType.number,
+            keyboardType: input,
             //focusNode: currentfn,
 
             //maxLength: 11,
@@ -3276,14 +3318,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
           validate();
          // Navigator.pushNamed(context, "/dashboard");
 
-          /*if (textEditingController[0].text == "" ||
-              textEditingController[0].text == null) {
-            AppData.showInSnackBar(context, "Please enter customer id(UHID)");
-
-          } else if (InsuranceFormNew.titleModel == null) {
-          AppData.showInSnackBar(context, "please select title");
-
-          }else if (textEditingController[1].text == "" ||
+        /*else if (textEditingController[1].text == "" ||
               textEditingController[1].text == null) {
             AppData.showInSnackBar(context, "Please enter first name");
           } else if (textEditingController[1].text != "" &&
@@ -3318,40 +3353,8 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
 
           } else if (textEditingController[4].text == "" ||
               textEditingController[4].text == null) {
-            AppData.showInSnackBar(context, "Please enter uid number");
-
-          } else if (textEditingController[4].text == "" ||
-              textEditingController[4].text == null) {
-            AppData.showInSnackBar(context, "Please enter occupation");
-
-          } else if (textEditingController[4].text == "" ||
-              textEditingController[4].text == null) {
-            AppData.showInSnackBar(context, "Please enter mobile number");
-
-          } else if (textEditingController[4].text == "" ||
-              textEditingController[4].text == null) {
-            AppData.showInSnackBar(context, "Please enter landline number");
-
-          } else if (textEditingController[4].text == "" ||
-              textEditingController[4].text == null) {
             AppData.showInSnackBar(context, "Please enter pan number");
 
-          } else if (textEditingController[4].text == "" ||
-              textEditingController[4].text == null) {
-            AppData.showInSnackBar(context, "Please enter passport number");
-
-          } else if (textEditingController[4].text == "" ||
-              textEditingController[4].text == null) {
-            AppData.showInSnackBar(context, "Please enter contact person");
-
-          } else if (textEditingController[4].text == "" ||
-              textEditingController[4].text == null) {
-            AppData.showInSnackBar(context, "Please enter annual income");
-
-
-             } else if (textEditingController[4].text == "" ||
-              textEditingController[4].text == null) {
-            AppData.showInSnackBar(context, "Please enter remarks");
           }
 
 */
@@ -3433,12 +3436,13 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
   }
 
   validate() async{
+    
     _formKey.currentState.validate();
      if (textEditingController[0].text == "" ||
               textEditingController[0].text == null) {
             AppData.showInSnackBar(context, "Please enter customer id(UHID)");
-
-          } else if (InsuranceFormNew.insurancetitlemodel == null) {
+          } 
+          else if (InsuranceFormNew.insurancetitlemodel == null) {
           AppData.showInSnackBar(context, "please select title");
 
           }else if (textEditingController[1].text == "" ||
@@ -3460,12 +3464,13 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
           } else if (InsuranceFormNew.genderModel == null) {
             AppData.showInSnackBar(context, "please select gender");
 
-          } else if (textEditingController[4].text == "" ||
-              textEditingController[4].text == null) {
-            AppData.showInSnackBar(context, "Please enter education qualification");
+          } 
+          // else if (textEditingController[4].text == "" ||
+          //     textEditingController[4].text == null) {
+          //   AppData.showInSnackBar(context, "Please enter education qualification");
 
-
-          } else if (textEditingController[5].text == "" ||
+          // } 
+          else if (textEditingController[5].text == "" ||
               textEditingController[5].text == null) {
             AppData.showInSnackBar(context, "Please enter email id");
 
@@ -3491,19 +3496,23 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
               textEditingController[9].text == null) {
             AppData.showInSnackBar(context, "Please enter contact mobile no");
 
-          } else if (textEditingController[10].text == "" ||
-              textEditingController[10].text == null) {
-            AppData.showInSnackBar(context, "Please enter landline number");
+          } 
+          // else if (textEditingController[10].text == "" ||
+          //     textEditingController[10].text == null) {
+          //   AppData.showInSnackBar(context, "Please enter landline number");
 
-          } else if (textEditingController[11].text == "" ||
-              textEditingController[11].text == null) {
-            AppData.showInSnackBar(context, "Please enter pan number");
+          // }
+          //  else if (textEditingController[11].text == "" ||
+          //     textEditingController[11].text == null) {
+          //   AppData.showInSnackBar(context, "Please enter pan number");
 
-          } else if (textEditingController[12].text == "" ||
-              textEditingController[12].text == null) {
-            AppData.showInSnackBar(context, "Please enter passport number");
+          // } 
+          // else if (textEditingController[12].text == "" ||
+          //     textEditingController[12].text == null) {
+          //   AppData.showInSnackBar(context, "Please enter passport number");
 
-          } else if (textEditingController[13].text == "" ||
+          // } 
+          else if (textEditingController[13].text == "" ||
               textEditingController[13].text == null) {
             AppData.showInSnackBar(context, "Please enter contact person");
 
@@ -3564,64 +3573,64 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
 
           else{
             print("form submit");
-             var postData = 
+             var postData =             
              {
     "ClientCreation": {
-    "Member_Customer_ID": textEditingController[0].text,
-    "salutation": InsuranceFormNew.insurancetitlemodel.name,
-    "firstName": textEditingController[1].text,
-    "middleName": textEditingController[2].text,
-    "lastName": textEditingController[3].text,
-    "dateofBirth": stdob,
-    "gender": InsuranceFormNew.genderModel.name,
-    "educationalQualification": textEditingController[4].text,
-    "pinCode": pincode.text,
-    "uidNo": textEditingController[7].text,
-    "maritalStatus": InsuranceFormNew.insurancemaritalmodel.name,
+    "Member_Customer_ID": textEditingController[0].text.toString(),
+    "salutation": InsuranceFormNew.insurancetitlemodel.name.toString(),
+    "firstName": textEditingController[1].text.toString(),
+    "middleName": textEditingController[2].text.toString(),
+    "lastName": textEditingController[3].text.toString(),
+    "dateofBirth": stdob.text,
+    "gender": InsuranceFormNew.genderModel.name.toString(),
+    "educationalQualification": textEditingController[4].text.toString(),
+    "pinCode": pincode.text.toString(),
+    "uidNo": textEditingController[7].text.toString(),
+    "maritalStatus": InsuranceFormNew.insurancemaritalmodel.name.toString(),
     "nationality": "Indian",
-    "occupation": InsuranceFormNew.insuranceoccupationmodel.key,
-    "primaryEmailID": textEditingController[5].text,
-    "contactMobileNo": textEditingController[9].text,
-    "stdLandlineNo": textEditingController[10].text,
-    "panNo": textEditingController[11].text,
-    "passportNumber": textEditingController[12].text,
-    "contactPerson": textEditingController[13].text,
-    "annualIncome": textEditingController[14].text,
-    "remarks": textEditingController[15].text,
+    "occupation": InsuranceFormNew.insuranceoccupationmodel.key.toString(),
+    "primaryEmailID": textEditingController[5].text.toString(),
+    "contactMobileNo": textEditingController[9].text.toString(),
+    "stdLandlineNo": textEditingController[10].text.toString(),
+    "panNo": textEditingController[11].text.toString(),
+    "passportNumber": textEditingController[12].text.toString(),
+    "contactPerson": textEditingController[13].text.toString(),
+    "annualIncome": textEditingController[14].text.toString(),
+    "remarks": textEditingController[15].text.toString(),
     "startDate": fromdtTxt.text,
     "endDate": todtTxt.text,
     "IdProof": "Adhaar Card", //textEditingController[7]
     "residenceProof": null, 
     "ageProof": null,
     "others": null,
-    "homeAddressLine1": textEditingController[17].text,
-    "homeAddressLine2": textEditingController[18].text,
-    "homeAddressLine3": textEditingController[19].text,
-    "homePinCode": textEditingController[20].text,
-    "homeArea": textEditingController[21].text,
-    "homeContactMobileNo": textEditingController[22].text,
-    "homeContactMobileNo2": textEditingController[23].text,
-    "homeSTDLandlineNo": textEditingController[24].text,
-    "homeFaxNo": textEditingController[25].text,
+    "homeAddressLine1": textEditingController[17].text.toString(),
+    "homeAddressLine2": textEditingController[18].text.toString(),
+    "homeAddressLine3": textEditingController[19].text.toString(),
+    "homePinCode": textEditingController[20].text.toString(),
+    "homeArea": textEditingController[21].text.toString(),
+    "homeContactMobileNo": textEditingController[22].text.toString(),
+    "homeContactMobileNo2": textEditingController[23].text.toString(),
+    "homeSTDLandlineNo": textEditingController[24].text.toString(),
+    "homeFaxNo": textEditingController[25].text.toString(),
     "sameAsHomeAddress": "1",
-    "mailingAddressLine1": textEditingController[27].text,
-    "mailingAddressLine2": textEditingController[28].text,
-    "mailingAddressLine3": textEditingController[29].text,
-    "mailingPinCode": textEditingController[30].text,
-    "mailingArea": textEditingController[31].text,
-    "mailingContactMobileNo": textEditingController[32].text,
-    "mailingContactMobileNo2": textEditingController[33].text,
-    "mailingSTDLandlineNo": textEditingController[12].text,
-    "mailingSTDLandlineNo2": textEditingController[34].text,
-    "mailingFaxNo": textEditingController[35].text,
-    "bankAccountType": textEditingController[36].text,
-    "bankAccountNo": textEditingController[37].text,
-    "ifscCode": textEditingController[38].text,
-    "GSTIN": textEditingController[39].text,
+    "mailingAddressLine1": textEditingController[27].text.toString(),
+    "mailingAddressLine2": textEditingController[28].text.toString(),
+    "mailingAddressLine3": textEditingController[29].text.toString(),
+    "mailingPinCode": textEditingController[30].text.toString(),
+    "mailingArea": textEditingController[31].text.toString(),
+    "mailingContactMobileNo": textEditingController[32].text.toString(),
+    "mailingContactMobileNo2": textEditingController[33].text.toString(),
+    "mailingSTDLandlineNo":  textEditingController[12].text.toString(),
+    "mailingSTDLandlineNo2": textEditingController[34].text.toString(),
+    "mailingFaxNo": textEditingController[35].text.toString(),
+    "bankAccountType":textEditingController[36].text.toString(),
+    "bankAccountNo":textEditingController[37].text.toString(),
+    "ifscCode":textEditingController[38].text.toString(),
+    "GSTIN": textEditingController[39].text.toString(),
     "GSTRegistrationStatus": "Consumers", //textEditingController[40]
     "IsEIAavailable": "0",
     "ApplyEIA": "0",
-    "EIAAccountNo": textEditingController[41].text,
+    "EIAAccountNo":textEditingController[41].text.toString(),
     "EIAWith": "0",
     "AccountType": null,
     "AddressProof": null,
@@ -3656,7 +3665,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
     "PolicyproductComponents": [
       {
         "PlanCode": "4112",
-        "SumInsured": "5000000",
+        "SumInsured": textEditingController[53].text.toString(),
         "SchemeCode": "4112000003"
       }
     ]
@@ -3664,18 +3673,18 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
     "MemObj": {
     "Member": [
       {
-        "MemberNo":  textEditingController[42].text,
-        "Salutation": InsuranceFormNew.titleModel.name,
-        "First_Name": textEditingController[43].text,
-        "Middle_Name": textEditingController[44].text,
-        "Last_Name": textEditingController[45].text,
-        "Gender": InsuranceFormNew.genderModel2.name,
+        "MemberNo":textEditingController[42].text.toString(), // "2"
+        "Salutation":InsuranceFormNew.titleModel.name.toString(),
+        "First_Name": textEditingController[43].text.toString(),
+        "Middle_Name": textEditingController[44].text.toString(),
+        "Last_Name": textEditingController[45].text.toString(),
+        "Gender": InsuranceFormNew.genderModel2.name[0].toString(),
         "DateOfBirth": nomdob.text,
-        "Relation_Code": InsuranceFormNew.relationmodel.key,
-        "Marital_Status": InsuranceFormNew.materialmodel.name,
-        "height":textEditingController[48].text,
-        "weight":textEditingController[49].text,
-        "occupation": InsuranceFormNew.insuranceoccupationmodel1.key,
+        "Relation_Code": "R001", //InsuranceFormNew.relationmodel.key.toString(),
+        "Marital_Status":InsuranceFormNew.materialmodel.name.toString(),
+        "height":textEditingController[48].text.toString(),
+        "weight": textEditingController[49].text.toString(),
+        "occupation":InsuranceFormNew.insuranceoccupationmodel1.key.toString(),
         "PrimaryMember": "N", //textEditingController[51]
         "MemberproductComponents": [
           {
@@ -3702,81 +3711,59 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
         "doctorName": null,
         "hospitalName": null,
         "phoneNumberHosital": null,
-        "Nominee_First_Name": "ffffffffffff",
-        "Nominee_Last_Name": "dsfssd",
-        "Nominee_Contact_Number": "7875445454",
+        "Nominee_First_Name": textEditingController[43].text.toString(),
+        "Nominee_Last_Name":textEditingController[45].text.toString(),
+        "Nominee_Contact_Number": textEditingController[52].text.toString(),
         "Nominee_Home_Address": null,
-        "Nominee_Relationship_Code": "R003"
-      },
-      {
-        "MemberNo": "2",
-        "Salutation": "Mrs",
-        "First_Name": "Sakshi",
-        "Middle_Name": null,
-        "Last_Name": "Dhoni",
-        "Gender": "F",
-        "DateOfBirth": "08/01/1999",
-        "Relation_Code": "R001",
-        "Marital_Status": "Married",
-        "height": "0.00",
-        "weight": "0",
-        "occupation": "O553",
-        "SumInsured": "0",
-        "PrimaryMember": "N",
-        "MemberproductComponents": [
-          {
-            "PlanCode": "4112",
-            "SumInsured": "5000000",
-            "MemberQuestionDetails": [
-              {
-                "QuestionCode": null,
-                "Answer": null,
-                "Remarks": null
-              }
-            ]
-          }
-        ],
-        "MemberPED": [
-          {
-            "PEDCode": null,
-            "Remarks": null
-          }
-        ],
-        "exactDiagnosis": null,
-        "dateOfDiagnosis": null,
-        "lastDateConsultation": null,
-        "detailsOfTreatmentGiven": null,
-        "doctorName": null,
-        "hospitalName": null,
-        "phoneNumberHosital": null,
-        "Nominee_First_Name": "fffffffffffffffff",
-        "Nominee_Last_Name": "ddgds",
-        "Nominee_Contact_Number": "7878754545",
-        "Nominee_Home_Address": null,
-        "Nominee_Relationship_Code": "R004"
-      }
+        "Nominee_Relationship_Code":  InsuranceFormNew.relationmodel.key.toString(),
+      }    
     ]
   },
-    "ReceiptCreation": {
-    
+    "ReceiptCreation": {    
   }
 
           };
      MyWidgets.showLoading(context);
-      widget.model.POSTMETHOD(
-          api: 'https://esbpre.adityabirlahealth.com/ABHICL_NB/Service1.svc/GFB',
-          json: postData,
-          fun: (Map<String, dynamic> map) {
-            Navigator.pop(context);
-            print("Response>>>>"+jsonEncode(map) );
-             String msg = map["message"].toString()??"NOT RESPONSE GET";
-            String code = map["code"].toString();
-            if (code == 200) {
-              popup(context,msg );
-            } else {
-              AppData.showInSnackBar(context, msg);
-            }
-          });
+     final response = await http.post(
+       Uri.parse('https://esbpre.adityabirlahealth.com/ABHICL_NB/Service1.svc/GFB'),
+       headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body:jsonEncode(postData)
+       );
+       print(jsonEncode(postData));
+       if (response.statusCode == 200) {
+          Navigator.pop(context);
+          Xml2Json xml2Json = Xml2Json();
+         print('HHHHHHHHHHHHHHHHHHHHHHHHHH ' +  nomdob.text);
+          var xmlString = '''${response.body}
+''';
+xml2Json.parse(xmlString);
+var jsonString = xml2Json.toParker();
+  var data = jsonDecode(jsonString);
+       print(data);
+    popup(context,'Success' );
+  } else {
+    print('GGGGGGGGGGGGGGGGGGGGGGGGGGGG ' );
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('Failed to create album.');
+  }
+      // widget.model.POSTMETHOD(
+      //     api: 'https://esbpre.adityabirlahealth.com/ABHICL_NB/Service1.svc/GFB',
+      //     json: postData,
+      //     fun: (Map<String, dynamic> map) {
+      //       Navigator.pop(context);
+      //       // print("Response>>>>"+jsonEncode(map) );
+      //        String msg = map["message"].toString()??"NOT RESPONSE GET";
+      //       String code = map["code"].toString();
+      //       if (code == 200) {
+      //         print('\n\n XXXXXXXXXXXXXXXXXXXXXXX ');
+      //         popup(context,msg );
+      //       } else {
+      //         AppData.showInSnackBar(context, msg);
+      //       }
+      //     });
 
   }
   }
