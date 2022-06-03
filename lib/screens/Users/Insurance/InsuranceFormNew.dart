@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:user/models/AddOrganDonModel.dart';
+import 'package:user/models/AdityaBirlaModel.dart';
 import 'package:user/models/AutocompleteDTO.dart';
 import 'package:user/models/InsurancePincodeModel.dart' as ins;
 import 'package:user/models/EmergencyMessageModel.dart';
@@ -188,6 +189,10 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
   FocusNode fnode7 = new FocusNode();
   FocusNode fnode8 = new FocusNode();
   FocusNode fnode9 = new FocusNode();
+
+  String quotationno="";
+  bool isquot=false;
+  AdityaBirlaModel adityaBirlaModel =AdityaBirlaModel();
 
   TextEditingController _email = TextEditingController();
   FocusNode emailFocus_ = FocusNode();
@@ -3638,7 +3643,7 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
     "IdentityProof": null
   },
     "PolicyCreationRequest": {
-    "Quotation_Number": "",
+    "Quotation_Number":isquot != true? "":quotationno,
     "MasterPolicyNumber": "62-21-00113-00-00",
     "GroupID": "Grp001",
     "Product_Code": "4000",
@@ -3732,38 +3737,49 @@ class InsuranceFormNewState extends State<InsuranceFormNew> {
     body:jsonEncode(postData)
        );
        print(jsonEncode(postData));
-       if (response.statusCode == 200) {
-          Navigator.pop(context);
-          Xml2Json xml2Json = Xml2Json();
-         print('HHHHHHHHHHHHHHHHHHHHHHHHHH ' +  nomdob.text);
-          var xmlString = '''${response.body}
-''';
-xml2Json.parse(xmlString);
-var jsonString = xml2Json.toParker();
-  var data = jsonDecode(jsonString);
-       print(data);
-    popup(context,'Success' );
+       if (response.statusCode == 200) {        
+          // Navigator.pop(context);
+          Xml2Json xml2Json = Xml2Json();        
+          var xmlString = '''${response.body}''';
+          xml2Json.parse(xmlString);
+          var jsonString = xml2Json.toParker();
+          var data = jsonDecode(jsonString);
+            adityaBirlaModel = AdityaBirlaModel.fromJson(data); 
+       print(data);          
+     if(adityaBirlaModel.ns0GFBRes.errorObj.errorMessage == "Success"){
+       setState(() {       
+       quotationno =  adityaBirlaModel.ns0GFBRes.policyDtls.quotationNumber;
+          print('Aditya Birla ');
+          isquot=true;
+         widget.model.POSTMETHOD(
+          api: 'http://api-demo.ehealthsystem.com/nirmalyaRest/api/register-insurance-adityabirla',
+          json: postData,
+          fun: (Map<String, dynamic> map) {
+            //  Navigator.pop(context);
+            print("Response>>>>"+jsonEncode(map) );
+             String msg = map["message"].toString()??"NOT RESPONSE GET";
+            String code = map["code"].toString();
+            if (code == "success") {
+              print('\n\n Sucess Nirmalya Api');
+              popup(context,msg );
+            } else {
+              AppData.showInSnackBar(context, msg);
+            }
+          });
+       });
+        
+
+     }
+// print(dd.toString());
+
+    // popup(context,'Success' );
   } else {
     print('GGGGGGGGGGGGGGGGGGGGGGGGGGGG ' );
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
-    throw Exception('Failed to create album.');
+    throw Exception('Failed to create.');
   }
-      // widget.model.POSTMETHOD(
-      //     api: 'https://esbpre.adityabirlahealth.com/ABHICL_NB/Service1.svc/GFB',
-      //     json: postData,
-      //     fun: (Map<String, dynamic> map) {
-      //       Navigator.pop(context);
-      //       // print("Response>>>>"+jsonEncode(map) );
-      //        String msg = map["message"].toString()??"NOT RESPONSE GET";
-      //       String code = map["code"].toString();
-      //       if (code == 200) {
-      //         print('\n\n XXXXXXXXXXXXXXXXXXXXXXX ');
-      //         popup(context,msg );
-      //       } else {
-      //         AppData.showInSnackBar(context, msg);
-      //       }
-      //     });
+      
 
   }
   }
