@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -91,6 +92,7 @@ class _QRViewExample1State extends State<QRViewExample1> {
                             _regNo.text == "") {
                           AppData.showInSnackBar(context, "Please scan reg no");
                         } else{
+                          controller.dispose();
                           widget.model.regNoValue = _regNo.text.toString();
                           print("regnooooooo"+_regNo.text.toString());
                           Navigator.pushNamed(context, "/docWalkInReg",);
@@ -114,8 +116,22 @@ class _QRViewExample1State extends State<QRViewExample1> {
       setState(() {
         //Navigator.pop(context,scanData.code.toLowerCase());
         //Navigator.pop
-        result = scanData;
-        _regNo.text = scanData.code;
+        /*result = scanData;
+        _regNo.text = scanData.code;*/
+        log("\n\n\n\nval:::"+scanData.code+"\n\n");
+        if(scanData.code.contains("REG_UID")) {
+          List<String> data=scanData.code.replaceAll("{", "").replaceAll("}", "").split(",");
+          result = scanData;
+          _regNo.text = data[1].split("=")[1].replaceAll(" ", "");
+        }else if(scanData.code.contains("UniqueId")) {
+          List<String> data=scanData.code.split("\n");
+          log("??LOG DATA??"+data.toString());
+          result = scanData;
+          _regNo.text = data[0].split(":")[1].replaceAll(" ", "");
+        }else{
+          result = scanData;
+          _regNo.text = scanData.code;
+        }
       });
     });
   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -113,8 +115,20 @@ class _QrEmergencyAccessState extends State<QrEmergencyAccess> {
       setState(() {
         //Navigator.pop(context,scanData.code.toLowerCase());
         //Navigator.pop
-        result = scanData;
-        _regNo.text = scanData.code;
+        log("\n\n\n\nval:::"+scanData.code+"\n\n");
+        if(scanData.code.contains("REG_UID")) {
+          List<String> data=scanData.code.replaceAll("{", "").replaceAll("}", "").split(",");
+          result = scanData;
+          _regNo.text = data[1].split("=")[1].replaceAll(" ", "");
+        }else if(scanData.code.contains("UniqueId")) {
+          List<String> data=scanData.code.split("\n");
+          log("??LOG DATA??"+data.toString());
+          result = scanData;
+          _regNo.text = data[0].split(":")[1].replaceAll(" ", "");
+        }else{
+          result = scanData;
+          _regNo.text = scanData.code;
+        }
       });
     });
   }
