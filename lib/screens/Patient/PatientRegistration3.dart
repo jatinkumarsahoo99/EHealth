@@ -51,6 +51,7 @@ class _PatientRegistration3State extends State<PatientRegistration3> {
 
   }
   callApi(){
+    log("ALKKKK>>>>"+ApiFactory.PATIENT_REG_ADDRESS+widget.model.loginResponse1.body.user);
     widget.model.GETMETHODCALL(
         api: ApiFactory.PATIENT_REG_ADDRESS+widget.model.loginResponse1.body.user,
         //token: widget.model.loginResponse.body.token,
@@ -59,9 +60,9 @@ class _PatientRegistration3State extends State<PatientRegistration3> {
             patientRegModel=PatientRegModel.fromJson(map);
             log("?????"+patientRegModel.body[0].countryId+"name:"+ patientRegModel.body[0].countryName);
             PatientRegistration3.countryModel=new KeyvalueModel(
-                key: patientRegModel.body[0].countryId,name: patientRegModel.body[0].countryName);
+                key: patientRegModel.body[0].countryId,name: patientRegModel.body[0].countryName,code: patientRegModel.body[0].countryCode);
             PatientRegistration3.stateModel=new KeyvalueModel(
-              key: patientRegModel.body[0].stateId,name: patientRegModel.body[0].stateName);
+              key: patientRegModel.body[0].stateId,name: patientRegModel.body[0].stateName,code: patientRegModel.body[0].stateCode);
             PatientRegistration3.districtModel=new KeyvalueModel(
               key: patientRegModel.body[0].districtId,name: patientRegModel.body[0].districtName);
             PatientRegistration3.cityModel=new KeyvalueModel(
@@ -504,6 +505,10 @@ class _PatientRegistration3State extends State<PatientRegistration3> {
           widget.model.patienStatekey = PatientRegistration3.stateModel.key;
           widget.model.patienStatecode = PatientRegistration3.stateModel.code;
           widget.model.districtid = PatientRegistration3.districtModel.key;
+
+          // widget.model.countrycode = PatientRegistration3.countryModel.key;
+          // widget.model.statecode = PatientRegistration3.stateModel.key;
+
           widget.model.patienCitykey = PatientRegistration3.cityModel.key;
           widget.model.patienCitycode = PatientRegistration3.cityModel.code;
           Navigator.pushNamed(context, "/patientRegistration4");

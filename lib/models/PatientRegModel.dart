@@ -49,6 +49,8 @@ class Body {
   String districtId;
   String districtName;
   String cityId;
+  String countryCode;
+  String stateCode;
   String cityName;
 
   Body(
@@ -82,6 +84,8 @@ class Body {
     districtName = json['districtName'];
     cityId = json['cityId'];
     cityName = json['cityName'];
+    stateCode = json['stateCode'];
+    countryCode = json['countryCode'];
   }
 
   Map<String, dynamic> toJson() {
