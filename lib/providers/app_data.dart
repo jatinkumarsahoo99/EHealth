@@ -467,7 +467,27 @@ static bool validateStructure(String value){
       //  title:  "Hey SuperHero",
       message: value,
       backgroundColor: Colors.red,
-      duration: Duration(seconds: 6),
+      duration: Duration(seconds: 5),
+    )..show(context);
+  }
+  static void showInSnackBar2(BuildContext context, String value) {
+    // final scaffold = Scaffold.of(context);
+    // scaffold.showSnackBar(
+    //   SnackBar(
+    //     content: new Text(
+    //       value.toUpperCase(),
+    //       style: TextStyle(color: Colors.white),
+    //     ),
+    //     duration: Duration(seconds: 1),
+    //     backgroundColor: Colors.red,
+    //   ),
+    // );
+
+    Flushbar(
+      //  title:  "Hey SuperHero",
+      message: value,
+      backgroundColor: Colors.red,
+      duration: Duration(seconds: 20),
     )..show(context);
   }
 

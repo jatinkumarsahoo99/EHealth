@@ -45,7 +45,8 @@ class _LabDashboardState extends State<LabDashboard> {
     'Daily Sales'
   ];
 
-  static final List<String> languageCodesList = application.supportedLanguagesCodes;
+  static final List<String> languageCodesList =
+      application.supportedLanguagesCodes;
   static final List<String> languagesList = application.supportedLanguages;
   final Map<dynamic, dynamic> languagesMap = {
     languagesList[0]: languageCodesList[0],
@@ -66,9 +67,7 @@ class _LabDashboardState extends State<LabDashboard> {
     application.onLocaleChanged(locale.toString());
   }
 
-
   int _selectedDestination = -1;
-
 
   static const platform = AppData.channel;
 
@@ -136,6 +135,8 @@ class _LabDashboardState extends State<LabDashboard> {
     print("Another ID>>>>>" + identifier);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -152,24 +153,22 @@ class _LabDashboardState extends State<LabDashboard> {
         backgroundColor: AppData.kPrimaryColor,
         elevation: 0,
       ),
-      body:
-      Stack(
-        children: [
+      body: Stack(children: [
         Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-            child: Image.asset(
-              "assets/images/labbanner.jpg",
-              // width: size.width,
-              // fit: BoxFit.cover,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              child: Image.asset(
+                "assets/images/labbanner.jpg",
+                // width: size.width,
+                // fit: BoxFit.cover,
+              ),
             ),
-          ),
-          SizedBox(height:3),
-        ],
-      ),
-      Container(
+            SizedBox(height: 3),
+          ],
+        ),
+        Container(
           padding: EdgeInsets.symmetric(horizontal: 7),
           child: Column(
             children: [
@@ -184,12 +183,12 @@ class _LabDashboardState extends State<LabDashboard> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildTileblue(
-                          icon:"assets/images/registerpatient.png",
+                          icon: "assets/images/registerpatient.png",
                           fun: () {
                             chooseAbha(context);
                             //AppData.showInSnackBar(context, "Coming soon");
                             // Navigator.pushNamed(context, "/medicalrecordpage");
-                           // Navigator.pushNamed(context, "/walkRegList");
+                            // Navigator.pushNamed(context, "/walkRegList");
                           },
                           color: AppData.BG2BLUE,
                           bordercolor: AppData.BG2BLUE,
@@ -202,7 +201,9 @@ class _LabDashboardState extends State<LabDashboard> {
                           width: 100,
                           height: 35,
                           /* child: Expanded(*/
-                          child: Text(MyLocalizations.of(context).text("REGISTER_PATIENT"),
+                          child: Text(
+                            MyLocalizations.of(context)
+                                .text("REGISTER_PATIENT"),
                             // MyLocalizations.of(context).text("My Orders"),
                             textAlign: TextAlign.center,
                             //overflow: TextOverflow.ellipsis,
@@ -236,7 +237,8 @@ class _LabDashboardState extends State<LabDashboard> {
                           width: 100,
                           height: 35,
                           /* child: Expanded(*/
-                          child: Text(MyLocalizations.of(context).text("APPOINTMENT"),
+                          child: Text(
+                            MyLocalizations.of(context).text("APPOINTMENT"),
                             // MyLocalizations.of(context).text("Confirmed Order"),
                             textAlign: TextAlign.center,
                             //overflow: TextOverflow.ellipsis,
@@ -299,10 +301,11 @@ class _LabDashboardState extends State<LabDashboard> {
                                           ),
                                         )),*/
                       ]),
-
                 ],
               ),
-              SizedBox(height: 7,),
+              SizedBox(
+                height: 7,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -314,7 +317,9 @@ class _LabDashboardState extends State<LabDashboard> {
                           icon: "assets/images/testlab.png",
                           fun: () {
                             // AppData.showInSnackDone(context, "Coming Soon");
-                            Navigator.pushNamed(context, "/testappointmentpage");
+                            Navigator.pushNamed(
+                                context, "/testappointmentpage");
+                           /* openAlertBox();*/
                             //AppData.showInSnackBar(context, "Coming soon");
                           },
                           //color: AppData.BG2BLUE,
@@ -357,7 +362,7 @@ class _LabDashboardState extends State<LabDashboard> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildTileblue(
-                          icon:"assets/images/orderslab.png",
+                          icon: "assets/images/orderslab.png",
                           //icon: FontAwesomeIcons.accusoft,
                           title: "My Orders",
                           fun: () {
@@ -396,7 +401,8 @@ class _LabDashboardState extends State<LabDashboard> {
                           icon: "assets/images/datalab.png",
                           fun: () {
                             // AppData.showInSnackDone(context, "Coming Soon");
-                            Navigator.pushNamed(context, "/testappointmentpage1");
+                            Navigator.pushNamed(
+                                context, "/testappointmentpage1");
                             //AppData.showInSnackBar(context, "Coming soon");
                           },
                           //color: AppData.BG2BLUE,
@@ -417,7 +423,6 @@ class _LabDashboardState extends State<LabDashboard> {
                             //overflow: TextOverflow.ellipsis,
                           ),
                         ),
-
                       ]),
                 ],
               ),
@@ -433,12 +438,10 @@ class _LabDashboardState extends State<LabDashboard> {
               //   color: AppData.white,
               //   bordercolor: AppData.white,
               // ),
-
             ],
           ),
         ),
-      ]
-      ),
+      ]),
       drawer: Drawer(
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -451,7 +454,8 @@ class _LabDashboardState extends State<LabDashboard> {
                     color: AppData.kPrimaryColor,
                     width: double.infinity,
                     child: Padding(
-                      padding: EdgeInsets.only(left: 20.0, top: 40.0, bottom: 20.0),
+                      padding:
+                          EdgeInsets.only(left: 20.0, top: 40.0, bottom: 20.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -474,19 +478,12 @@ class _LabDashboardState extends State<LabDashboard> {
                           ),*/
                           CircleAvatar(
                             radius: 35,
-                            foregroundColor:
-                            Colors
-                                .white,
+                            foregroundColor: Colors.white,
                             backgroundColor: Colors.white,
-                            child:
-                            Image.asset(
+                            child: Image.asset(
                               'assets/images/user.png',
-                              height:
-                              size.height *
-                                  0.07,
-                              width:
-                              size.width *
-                                  0.13,
+                              height: size.height * 0.07,
+                              width: size.width * 0.13,
                               //fit: BoxFit.cover,
                             ),
                           ),
@@ -506,12 +503,13 @@ class _LabDashboardState extends State<LabDashboard> {
                       ),
                     ),
                   ),
-
-                  Positioned(right: 0,
-                    child:  Container(
+                  Positioned(
+                    right: 0,
+                    child: Container(
                       width: size.width,
                       height: 60,
-                      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                       margin: EdgeInsets.only(top: 10.0),
                       decoration: BoxDecoration(
                         // color: Colors.grey.withOpacity(0.5),
@@ -521,7 +519,8 @@ class _LabDashboardState extends State<LabDashboard> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 2),
                             alignment: Alignment.center,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
@@ -551,13 +550,16 @@ class _LabDashboardState extends State<LabDashboard> {
                           ),
                         ],
                       ),
-                    ),),
+                    ),
+                  ),
                 ],
               ),
               ListTile(
                   leading: Icon(Icons.dashboard,
                       color: AppData.menublueColor, size: 27),
-                  title: Text(MyLocalizations.of(context).text("DASHBOARD"),),
+                  title: Text(
+                    MyLocalizations.of(context).text("DASHBOARD"),
+                  ),
                   selected: _selectedDestination == 0,
                   onTap: () {
                     selectDestination(0);
@@ -565,16 +567,18 @@ class _LabDashboardState extends State<LabDashboard> {
                     //Navigator.pushNamed(context, "/dashboard");
                     // Navigator.pushNamed(context, "/dashboard1");
                   }
-                // onTap: (){},
+                  // onTap: (){},
 
-              ),
+                  ),
               ListTile(
                 leading: Image.asset(
                   "assets/images/myprofile.png",
                   height: 30,
                   //color: Colors.redAccent,
                 ),
-                title: Text(MyLocalizations.of(context).text("MY_PROFILE"),),
+                title: Text(
+                  MyLocalizations.of(context).text("MY_PROFILE"),
+                ),
                 selected: _selectedDestination == 1,
                 onTap: () {
                   selectDestination(1);
@@ -648,7 +652,7 @@ class _LabDashboardState extends State<LabDashboard> {
                     Navigator.pushNamed(context, "/contactus");
                     //Navigator.pushNamed(context, "/discountoffer");
                   }),
-             /* ListTile(
+              /* ListTile(
                   leading: Image.asset(
                     "assets/images/support.png",
                     height: 30,
@@ -665,13 +669,13 @@ class _LabDashboardState extends State<LabDashboard> {
                     "assets/images/support.png",
                     height: 30,
                   ),
-                  title: Text(MyLocalizations.of(context).text("PEAK_FLOW_APP")),
+                  title:
+                      Text(MyLocalizations.of(context).text("PEAK_FLOW_APP")),
                   selected: _selectedDestination == 8,
                   onTap: () {
                     selectDestination(8);
                     _callLabApp("");
                   }),
-
               ListTile(
                 leading: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -679,7 +683,7 @@ class _LabDashboardState extends State<LabDashboard> {
                     Container(
                         width: 30,
                         height: 30,
-                        child: Image.asset( "assets/images/changepassword.png",
+                        child: Image.asset("assets/images/changepassword.png",
                             fit: BoxFit.cover)),
                     // VerticalDivider(
                     //   thickness: 1,
@@ -687,7 +691,8 @@ class _LabDashboardState extends State<LabDashboard> {
                     // ),
                   ],
                 ),
-                title: Text(MyLocalizations.of(context).text("CHANGE_PASSWORD")),
+                title:
+                    Text(MyLocalizations.of(context).text("CHANGE_PASSWORD")),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, "/changePassword");
@@ -715,14 +720,14 @@ class _LabDashboardState extends State<LabDashboard> {
                   Navigator.pushNamed(context, "/login");
                 },*/
               ),
-
             ],
           ),
-    ),
+        ),
       ),
-    //    body: _dashboardnew(context),
+      //    body: _dashboardnew(context),
     );
   }
+
   /* Future<void> initUniqueIdentifierState() async {
     if(Platform.isAndroid) {
       MyWidgets.showLoading(context);
@@ -873,7 +878,8 @@ class _LabDashboardState extends State<LabDashboard> {
                           icon: CupertinoIcons.settings_solid,
                           title: "Updation Data",
                           fun: () {
-                            Navigator.pushNamed(context, "/testappointmentpage1");
+                            Navigator.pushNamed(
+                                context, "/testappointmentpage1");
                           },
                           color: AppData.BG1RED,
                           bordercolor: AppData.BG1RED,
@@ -1142,7 +1148,8 @@ class _LabDashboardState extends State<LabDashboard> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         ListTile(
-                          title: Text(MyLocalizations.of(context).text("HEALTH_SCREENING")),
+                          title: Text(MyLocalizations.of(context)
+                              .text("HEALTH_SCREENING")),
                           onTap: () {
                             widget.model.apntUserType =
                                 Const.HEALTH_SCREENING_APNT;
@@ -1153,7 +1160,8 @@ class _LabDashboardState extends State<LabDashboard> {
                         ),
                         Divider(),
                         ListTile(
-                          title: Text(MyLocalizations.of(context).text("HEALTH_CHECKUP")),
+                          title: Text(MyLocalizations.of(context)
+                              .text("HEALTH_CHECKUP")),
                           onTap: () {
                             widget.model.apntUserType = Const.HEALTH_CHKUP_APNT;
                             Navigator.pop(context);
@@ -1162,7 +1170,8 @@ class _LabDashboardState extends State<LabDashboard> {
                         ),
                         Divider(),
                         ListTile(
-                          title: Text(MyLocalizations.of(context).text("DOCTOR_APPOINTMENT")),
+                          title: Text(MyLocalizations.of(context)
+                              .text("DOCTOR_APPOINTMENT")),
                           onTap: () {
                             widget.model.apntUserType = Const.DOC_APNT;
                             Navigator.pop(context);
@@ -1279,12 +1288,13 @@ class _LabDashboardState extends State<LabDashboard> {
         .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
   }
 
-  Widget _buildTilered({String icon,
-    String title,
-    double size,
-    Color bordercolor,
-    Color color,
-    Function fun}) {
+  Widget _buildTilered(
+      {String icon,
+      String title,
+      double size,
+      Color bordercolor,
+      Color color,
+      Function fun}) {
     return InkWell(
       onTap: fun,
       child: Container(
@@ -1295,7 +1305,7 @@ class _LabDashboardState extends State<LabDashboard> {
         width: 100,
         decoration: BoxDecoration(
 
-          /// borderRadius: BorderRadius.circular(7.0),
+            /// borderRadius: BorderRadius.circular(7.0),
             borderRadius: BorderRadius.only(
               topLeft: Radius.zero,
               topRight: Radius.circular(10.0),
@@ -1306,8 +1316,7 @@ class _LabDashboardState extends State<LabDashboard> {
             border: Border.all(
               color: AppData.kPrimaryRedColor,
               width: 1.0,
-            )
-        ),
+            )),
         child: Stack(
           children: [
             Column(
@@ -1325,26 +1334,23 @@ class _LabDashboardState extends State<LabDashboard> {
                     color: AppData.kPrimaryRedColor,
                   ),
                 ),
-
               ],
             ),
-
           ],
         ),
       ),
     );
   }
 
-
-
-  Widget _buildTileblue({
-    /*IconData icon,*/
-    String icon,
-    String title,
-    double size,
-    Color bordercolor,
-    Color color,
-    Function fun}) {
+  Widget _buildTileblue(
+      {
+      /*IconData icon,*/
+      String icon,
+      String title,
+      double size,
+      Color bordercolor,
+      Color color,
+      Function fun}) {
     return InkWell(
       onTap: fun,
       child: Container(
@@ -1353,7 +1359,8 @@ class _LabDashboardState extends State<LabDashboard> {
         height: 85,
         width: 100,
         decoration: BoxDecoration(
-          /// borderRadius: BorderRadius.circular(7.0),
+
+            /// borderRadius: BorderRadius.circular(7.0),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10.0),
               topRight: Radius.zero,
@@ -1364,8 +1371,7 @@ class _LabDashboardState extends State<LabDashboard> {
             border: Border.all(
               color: AppData.kPrimaryColor,
               width: 1.0,
-            )
-        ),
+            )),
         child: Stack(
           children: [
             Column(
@@ -1380,24 +1386,24 @@ class _LabDashboardState extends State<LabDashboard> {
                       fit: BoxFit.fitWidth,
                       width: 50,
                       height: 50.0,
-                      color:AppData.kPrimaryColor,
+                      color: AppData.kPrimaryColor,
                     )),
               ],
             ),
-
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTile({String icon,
-    /*IconData icon,*/
-    String title,
-    double size,
-    Color bordercolor,
-    Color color,
-    Function fun}) {
+  Widget _buildTile(
+      {String icon,
+      /*IconData icon,*/
+      String title,
+      double size,
+      Color bordercolor,
+      Color color,
+      Function fun}) {
     return InkWell(
       onTap: fun,
       child: Container(
@@ -1424,7 +1430,6 @@ class _LabDashboardState extends State<LabDashboard> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.end,
-
               children: <Widget>[
                 Align(
                     alignment: Alignment.center,
@@ -1432,17 +1437,14 @@ class _LabDashboardState extends State<LabDashboard> {
                       /* "assets/logo1.png"*/
                       icon,
                       fit: BoxFit.fitWidth,
-
                     )),
               ],
             ),
-
           ],
         ),
       ),
     );
   }
-
 
   chooseAbha(BuildContext context) {
     return showDialog(
@@ -1465,11 +1467,14 @@ class _LabDashboardState extends State<LabDashboard> {
                         ListTile(
                           title: Text("With ABHA Id"),
                           onTap: () {
-                           /* widget.model.apntUserType =
+                            /* widget.model.apntUserType =
                                 Const.HEALTH_SCREENING_APNT;*/
-                            log("LOGIN RESPONSE>>>"+jsonEncode(widget.model.loginResponse1.toJson()));
+                            log("LOGIN RESPONSE>>>" +
+                                jsonEncode(
+                                    widget.model.loginResponse1.toJson()));
                             Navigator.pop(context);
-                            Navigator.pushNamed(context, "/aadharRegistrationLab");
+                            Navigator.pushNamed(
+                                context, "/aadharRegistrationLab");
                             // AppData.showInSnackBar(context,"hi");
                           },
                         ),
@@ -1477,13 +1482,12 @@ class _LabDashboardState extends State<LabDashboard> {
                         ListTile(
                           title: Text("Without ABHA Id"),
                           onTap: () {
-                           // widget.model.apntUserType = Const.HEALTH_CHKUP_APNT;
+                            // widget.model.apntUserType = Const.HEALTH_CHKUP_APNT;
                             Navigator.pop(context);
                             Navigator.pushNamed(context, "/walkRegList");
                           },
                         ),
                         Divider(),
-
                         MaterialButton(
                           child: Text(
                             MyLocalizations.of(context).text("CANCEL"),
@@ -1502,5 +1506,6 @@ class _LabDashboardState extends State<LabDashboard> {
           );
         });
   }
-
 }
+
+

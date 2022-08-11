@@ -73,6 +73,7 @@ class _PocReportListPageState extends State<PocReportListPage> {
             if (map[Const.CODE] == Const.SUCCESS) {
               if (i == 1) {
                 pocReportModel = PocReportModel.fromJson(map);
+                log(map.toString());
                 //Navigator.pop(context);
               } else {
                 pocReportModel.addMore(map);

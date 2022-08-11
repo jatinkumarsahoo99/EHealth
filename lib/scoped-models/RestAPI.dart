@@ -406,8 +406,8 @@ class RestAPI extends Model with PassData{
       @required Map<String, dynamic> json,
       @required Function fun}) async {
     print("<<>>>>>API CALL>>>>>>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" + api);
-    print("<<>>>>>DATA SEND>>>>>>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-        JsonEncoder().convert(json).toString());
+   /* print("<<>>>>>DATA SEND>>>>>>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+        JsonEncoder().convert(json).toString());*/
     try {
       Response response = await dio.post(api, data: jsonEncode(json));
       if (response.statusCode == 200) {

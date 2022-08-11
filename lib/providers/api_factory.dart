@@ -6,9 +6,8 @@ class ApiFactory {
   ////Local : isLocal:true && isProduction:false
 
   static bool isProduction = false;
-  static bool isLocal = true;
-  static String LOCAL_URL = "http://192.168.0.134:8062/nirmalyaRest/api/";
-
+  static bool isLocal = false;
+  static String LOCAL_URL = "http://192.168.0.131:8062/nirmalyaRest/api/";
   static String REG_DEVICE = "https://cca.medtel.in/Ziniai/manageDeviceId";
   static String MAIN_URL = (!isLocal)
       ? (isProduction)
@@ -452,6 +451,14 @@ class ApiFactory {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  //Hardware Integration
+
+//Writzo
+
+  static String API_Writzo = MAIN_URL + "post-test-report-wrizto";
+
+  //AyuRythm
+  static String API_AyuRythm = MAIN_URL + "post-test-report-ayurythm";
 
 
 
