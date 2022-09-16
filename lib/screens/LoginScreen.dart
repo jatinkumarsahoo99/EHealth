@@ -16,6 +16,7 @@ import 'package:user/models/AyuRythmDataModel.dart';
 import 'package:user/models/AyuRythmPostModel.dart';
 import 'package:user/models/LoginResponse1.dart';
 import 'package:user/models/MasterLoginResponse.dart' as master;
+import 'package:user/models/NadiModel.dart';
 import 'package:user/providers/Const.dart';
 import 'package:user/providers/SharedPref.dart';
 import 'package:user/providers/api_factory.dart';
@@ -487,12 +488,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                     fontSize: 25.0,
                                     color: Colors.black,
                                   ),
-                                )
+                                ),
+
                               ],
                             ),
                           ),
                         ),
                       ),
+                    /*  FlatButton(
+                          color: Colors.green,
+                          onPressed: (){
+                            String val="";
+                            callNadiApp(val);
+                      }, child: Text("Call Nadi")),*/
                       SizedBox(height: 5),
                       // Image.asset("assets/congrat1.gif"),
                       Padding(
@@ -1529,5 +1537,25 @@ List<String> data_auyrthm = result.toString().split('@');
       }
       log(">>>>>>>>>>>data_converted"+ayuRythmPostModel.toJson().toString());
     } on PlatformException catch (e) {}
+  }
+  callNadiApp(String val) async {
+    val="9121401327185797"+","+"24"+","+"male"+","+"Jatin"+","+"120"+","+"60";
+    var result = await AppData.channel.invokeMethod('call_nadi', val);
+    NadiModel nadiModel = NadiModel.fromJson(jsonDecode(result));
+    log("nadi data"+nadiModel.toJson().toString());
+    widget.model.POSTMETHOD(
+        api: "http://192.168.0.119:8062/nirmalyaRest/api/post-test-report-nadi",
+        fun: (Map<String, dynamic> map) {
+          Navigator.pop(context);
+          log("Response>>>" + jsonEncode(map));
+          if(map['code']=="success"){
+            AppData.showInSnackDone(context, map['message']);
+          }
+          else{
+            AppData.showInSnackBar(context,map['message']);
+          }
+        },
+        json:nadiModel.toJson());
+    AppData.showInSnackBar(context, result??"Some thing wrong");
   }
 }

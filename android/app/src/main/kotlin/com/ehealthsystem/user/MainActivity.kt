@@ -68,7 +68,8 @@ class MainActivity : FlutterActivity() {
                  )
                  t.show()*/
                 startActivity(LaunchIntent)
-            } else if (call.method == "writzo") {
+            }
+            else if (call.method == "writzo") {
                 val string: String = call.arguments as String
                 val data: List<String> = string.split(",")
                 val intent = Intent()
@@ -110,7 +111,52 @@ class MainActivity : FlutterActivity() {
 
                 }
 
-            } else if (call.method == "ayurythm") {
+            } else if (call.method == "call_nadi") {
+                val string: String = call.arguments as String
+                val data: List<String> = string.split(",")
+//                val LaunchIntent = packageManager
+//                    .getLaunchIntentForPackage("com.example.ehs_app")
+               /* val LaunchIntent = packageManager
+                    .getLaunchIntentForPackage("com.example.untitled")
+                LaunchIntent!!.action = Intent.ACTION_SEND*/
+                val intent = Intent()
+
+                intent.setComponent(
+                    ComponentName(
+                        "com.example.ehs_app",
+                        "com.example.ehs_app.MainActivity",
+                    )
+                )
+
+                intent.setAction("com.example.ehs_app")
+                intent.action = Intent.ACTION_SEND
+                intent.putExtra("UHID", data[0])
+//                intent.putExtra(Intent.EXTRA_TEXT, "Jatin")
+                intent.putExtra("Age", data[1])
+
+                intent.putExtra("Gender",data[2])
+
+                intent.putExtra("Name",data[3])
+
+
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+                intent.setType("text/plain")
+
+                intent.toUri(Intent.URI_INTENT_SCHEME)
+
+                try {
+
+                    startActivityForResult(intent, 1003)
+
+                } catch (e: Exception) {
+
+                    //Log.v("DATA_TRANSFER", e.message!!)
+
+                }
+
+            }
+            else if (call.method == "ayurythm") {
 
                 val string: String = call.arguments as String
                 val data: List<String> = string.split(",")
@@ -430,7 +476,12 @@ class MainActivity : FlutterActivity() {
 
 
             this.result.success(finalVal1.toString())
-        } else {
+        }else if (requestCode == 1003) {
+            val resultData: String? = data?.getStringExtra("data")
+            /*  Toast.makeText(this, "In Android Code:" + vitalData, Toast.LENGTH_SHORT).show()*/
+            this.result.success(resultData)
+        }
+        else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
