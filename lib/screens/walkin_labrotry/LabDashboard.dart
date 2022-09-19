@@ -316,11 +316,12 @@ class _LabDashboardState extends State<LabDashboard> {
                         _buildTilered(
                           icon: "assets/images/testlab.png",
                           fun: () {
-                            // AppData.showInSnackDone(context, "Coming Soon");
+
+                           /* Navigator.pushNamed(
+                                context, "/testappointmentpage");*/
                             Navigator.pushNamed(
-                                context, "/testappointmentpage");
-                           /* openAlertBox();*/
-                            //AppData.showInSnackBar(context, "Coming soon");
+                                context, "/testappointmentnewpage");
+
                           },
                           //color: AppData.BG2BLUE,
                           color: AppData.BG1RED,

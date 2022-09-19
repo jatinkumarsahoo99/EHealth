@@ -323,7 +323,7 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
       isDataNotAvail = false;
       final df = new DateFormat('dd/MM/yyyy');
       //final df = new DateFormat('yyyy/MM/dd');
-      today = df.format(picked);
+      today = df.format(picked?? DateTime.now());
       callAPI(today);
     });
   }
@@ -939,6 +939,7 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
                                       width: 60,
                                       child: InkWell(
                                         onTap: () {
+                                          widget.model.localBookModelBody = foundUser[index];
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(builder: (context) =>  TestPerfromPage(

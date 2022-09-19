@@ -128,6 +128,7 @@ import 'package:user/screens/Users/MyMedicalRecord/UploadDocument/UploadDocument
 import 'package:user/screens/Users/Preventivehealthcare/PreventiveHealthCare.dart';
 import 'package:user/screens/Users/organ/OrganCardPage.dart';
 import 'package:user/screens/payment/RazorPayPage.dart';
+import 'package:user/screens/walkin_labrotry/Screen/TestAppointmentNewPage.dart';
 import 'notification/MedReminder.dart';
 import 'screens/CreateUserIDScreen.dart';
 import 'screens/Doctor/Dashboard/Showemr/MobileUpload/DoctorUploaddocument.dart';
@@ -841,6 +842,9 @@ class _MyAppState extends State<MyApp> {
               '/testappointmentpage': (context) => TestAppointmentPage(
                     model: _model,
                   ),
+              '/testappointmentnewpage': (context) => TestAppointmentNewPage(
+                model: _model,
+              ),
               '/testappointmentpage1': (context) => TestAppointmentPage1(
                     model: _model,
                   ),

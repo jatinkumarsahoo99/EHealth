@@ -91,6 +91,7 @@ class GetvendertestLists {
   String status;
   String venderId;
   String venderName;
+  bool isSelected = false;
 
   GetvendertestLists(
       {this.vleId,
@@ -99,7 +100,9 @@ class GetvendertestLists {
         this.testName,
         this.status,
         this.venderId,
-        this.venderName});
+        this.venderName,
+        this.isSelected
+      });
 
   GetvendertestLists.fromJson(Map<String, dynamic> json) {
     vleId = json['vleId'];
@@ -109,6 +112,11 @@ class GetvendertestLists {
     status = json['status'];
     venderId = json['venderId'];
     venderName = json['venderName'];
+    if(json.containsKey(isSelected)){
+      isSelected=json['isSelected']?? false;
+    }else{
+      isSelected=false;
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -120,6 +128,7 @@ class GetvendertestLists {
     data['status'] = this.status;
     data['venderId'] = this.venderId;
     data['venderName'] = this.venderName;
+    data['isSelected'] = this.isSelected??false;
     return data;
   }
 }
