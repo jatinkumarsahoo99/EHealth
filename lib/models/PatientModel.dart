@@ -1,16 +1,16 @@
-class TestTypeModel {
-  List<Body> body;
+class PatientModel {
+  List<PatientListBody> body;
   String message;
   String code;
   String total;
 
-  TestTypeModel({this.body, this.message, this.code, this.total});
+  PatientModel({this.body, this.message, this.code, this.total});
 
-  TestTypeModel.fromJson(Map<String, dynamic> json) {
+  PatientModel.fromJson(Map<String, dynamic> json) {
     if (json['body'] != null) {
-      body = new List<Body>();
+      body = new List<PatientListBody>();
       json['body'].forEach((v) {
-        body.add(new Body.fromJson(v));
+        body.add(new PatientListBody.fromJson(v));
       });
     }
     message = json['message'];
@@ -30,7 +30,7 @@ class TestTypeModel {
   }
 }
 
-class Body {
+class PatientListBody {
   String vleId;
   String patientId;
   String testId;
@@ -45,10 +45,9 @@ class Body {
   String mob;
   String date;
   String age;
-  String type;
-  List<GetvendertestLists> getvendertestLists;
+  String getvendertestLists;
 
-  Body(
+  PatientListBody(
       {this.vleId,
         this.patientId,
         this.testId,
@@ -63,10 +62,9 @@ class Body {
         this.mob,
         this.date,
         this.age,
-        this.type,
         this.getvendertestLists});
 
-  Body.fromJson(Map<String, dynamic> json) {
+  PatientListBody.fromJson(Map<String, dynamic> json) {
     vleId = json['vleId'];
     patientId = json['patientId'];
     testId = json['testId'];
@@ -81,13 +79,7 @@ class Body {
     mob = json['mob'];
     date = json['date'];
     age = json['age'];
-    type = json['type'];
-    if (json['getvendertestLists'] != null) {
-      getvendertestLists = new List<GetvendertestLists>();
-      json['getvendertestLists'].forEach((v) {
-        getvendertestLists.add(new GetvendertestLists.fromJson(v));
-      });
-    }
+    getvendertestLists = json['getvendertestLists'];
   }
 
   Map<String, dynamic> toJson() {
@@ -106,65 +98,7 @@ class Body {
     data['mob'] = this.mob;
     data['date'] = this.date;
     data['age'] = this.age;
-    data['type'] = this.type;
-    if (this.getvendertestLists != null) {
-      data['getvendertestLists'] =
-          this.getvendertestLists.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class GetvendertestLists {
-  String vleId;
-  String patientId;
-  String testId;
-  String testName;
-  String status;
-  String venderId;
-  String venderName;
-  String type;
-  bool isSelected = false;
-
-  GetvendertestLists(
-      {this.vleId,
-        this.patientId,
-        this.testId,
-        this.testName,
-        this.status,
-        this.venderId,
-        this.venderName,
-        this.type,
-        this.isSelected
-      });
-
-  GetvendertestLists.fromJson(Map<String, dynamic> json) {
-    vleId = json['vleId'];
-    patientId = json['patientId'];
-    testId = json['testId'];
-    testName = json['testName'];
-    status = json['status'];
-    venderId = json['venderId'];
-    venderName = json['venderName'];
-    type = json['type'];
-    if(json.containsKey(isSelected)){
-      isSelected=json['isSelected']?? false;
-    }else{
-      isSelected=false;
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['vleId'] = this.vleId;
-    data['patientId'] = this.patientId;
-    data['testId'] = this.testId;
-    data['testName'] = this.testName;
-    data['status'] = this.status;
-    data['venderId'] = this.venderId;
-    data['venderName'] = this.venderName;
-    data['type'] = this.type;
-    data['isSelected'] = this.isSelected??false;
+    data['getvendertestLists'] = this.getvendertestLists;
     return data;
   }
 }

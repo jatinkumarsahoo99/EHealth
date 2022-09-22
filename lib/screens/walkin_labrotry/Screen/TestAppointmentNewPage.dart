@@ -18,6 +18,7 @@ import 'package:user/models/KeyvalueModel.dart';
 import 'package:user/models/LabBookModel.dart';
 import 'package:user/models/LoginResponse1.dart' as login;
 import 'package:user/models/NadiModel.dart';
+import 'package:user/models/PatientModel.dart';
 import 'package:user/models/WritzoReceiveModel.dart';
 import 'package:user/providers/Aes.dart';
 import 'package:user/providers/Const.dart';
@@ -32,22 +33,22 @@ import '../../CreateAppointmentLab.dart';
 import 'TestPerfromPage.dart';
 
 // ignore: must_be_immutable
-class TestAppointmentPage extends StatefulWidget {
+class TestAppointmentNewPage extends StatefulWidget {
   final bool isConfirmPage;
   MainModel model;
   static KeyvalueModel relationmodel = null;
 
-  TestAppointmentPage({
+  TestAppointmentNewPage({
     Key key,
     this.model,
     this.isConfirmPage = false,
   }) : super(key: key);
 
   @override
-  _TestAppointmentPageState createState() => _TestAppointmentPageState();
+  _TestAppointmentNewPageState createState() => _TestAppointmentNewPageState();
 }
 
-class _TestAppointmentPageState extends State<TestAppointmentPage>
+class _TestAppointmentNewPageState extends State<TestAppointmentNewPage>
     with WidgetsBindingObserver {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -80,8 +81,10 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
   var dio = Dio();
   static const platform = AppData.channel;
   List<Body> foundUser;
+  List<PatientListBody> foundUser1;
   login.LoginResponse1 loginResponse1;
   var pdf = pw.Document();
+  PatientModel patientModel;
   @override
   void initState() {
     super.initState();
@@ -98,13 +101,30 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
     final df = new DateFormat('dd/MM/yyyy');
     //final df = new DateFormat('yyyy/MM/dd');
     today = df.format(DateTime.now());
-    callAPI(today);
+    // callAPI(today);
     //printInterger()
+    callPatientApi();
   }
-
+  callPatientApi() {
+    widget.model.GETMETHODCALL(
+        api: ApiFactory
+            .GET_labPatient + widget.model.loginResponse1.body.user,
+        fun: (Map<String, dynamic> map) {
+          setState(() {
+            String msg = map[Const.MESSAGE];
+            if (map[Const.CODE] == Const.SUCCESS) {
+              log("Response>>>" + jsonEncode(map));
+              patientModel = PatientModel.fromJson(map);
+              foundUser1=patientModel.body;
+            } else {
+              AppData.showInSnackBar(context, msg);
+            }
+          });
+        });
+  }
   bool isDataNotAvail = false;
   final Completer<PDFViewController> _controller =
-      Completer<PDFViewController>();
+  Completer<PDFViewController>();
   createPdf(File _image, int count) async {
     var image = pw.MemoryImage(_image.readAsBytesSync());
     pdf.addPage(pw.Page(
@@ -122,7 +142,7 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
         /* Directory directory = await getApplicationDocumentsDirectory();*/
         log(folder.path);
         var file =
-            File('${folder.path}/writzoFile${DateTime.now().toString()}.pdf');
+        File('${folder.path}/writzoFile${DateTime.now().toString()}.pdf');
         if (await file.exists()) {
           await file.delete();
         }
@@ -166,7 +186,7 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
         if (result != null) {
           try {
             WritzoReceiveModel writzoReceiveModel =
-                WritzoReceiveModel.fromJson(json.decode(result));
+            WritzoReceiveModel.fromJson(json.decode(result));
             // AppData.showInSnackDone1(context, result);
             log("post data>>>>>" + writzoReceiveModel.toJson().toString());
             List<ScreeningDetails> document = [];
@@ -184,7 +204,7 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
                     type: element.type,
                     vitalName: element.vitalName,
                     result: /* (AppData.getExt(element.result) !='pdf')?  createPdf(File(element.result),count):*/
-                        File(element.result).path));
+                    File(element.result).path));
                 log(">>>>>>path" + File(element.result).path);
                 count++;
               } else {
@@ -309,7 +329,6 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
           });
         });
   }
-
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -317,7 +336,7 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
         initialDate: DateTime.now(),
         firstDate: DateTime.now().subtract(Duration(days: 30)),
         lastDate:
-            DateTime.now().add(Duration(days: 276))); //18 years is 6570 days
+        DateTime.now().add(Duration(days: 276))); //18 years is 6570 days
     //if (picked != null && picked != selectedDate)
     setState(() {
       isDataNotAvail = false;
@@ -360,18 +379,18 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
   }
 
   void _runFilter(String enteredKeyword) {
-    List<Body> results = [];
+    List<PatientListBody> results = [];
     if (enteredKeyword.isEmpty) {
-      results = appointModel.body;
+      results = patientModel.body;
     } else {
-      results = appointModel.body
+      results = patientModel.body
           .where((user) => user.patientName
-              .toLowerCase()
-              .contains(enteredKeyword.toLowerCase()))
+          .toLowerCase()
+          .contains(enteredKeyword.toLowerCase()))
           .toList();
     }
     setState(() {
-      foundUser = results;
+      foundUser1 = results;
     });
   }
 
@@ -583,7 +602,7 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
 
         log("json decode result" + map.toString());
         AyuRythmDataModel ayuRythmDataModel =
-            AyuRythmDataModel.fromJson(json.decode(json.encode(map)));
+        AyuRythmDataModel.fromJson(json.decode(json.encode(map)));
         AyuRythmPostModel ayuRythmPostModel = AyuRythmPostModel(
             data: Data(
                 type: null,
@@ -618,8 +637,8 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
             data_auyrthm[3].toString().trim() != "") {
           print("data_auyrthm[3]" + data_auyrthm[3].toString());
           ayuRythmPostModel.prakriti =
-              /* Vikriti(kapha: "36.10",pitta: "25.00",vata: "38.90");*/
-              Vikriti.fromJson(jsonDecode(data_auyrthm[3]));
+          /* Vikriti(kapha: "36.10",pitta: "25.00",vata: "38.90");*/
+          Vikriti.fromJson(jsonDecode(data_auyrthm[3]));
         } else {
           ayuRythmPostModel.prakriti =
               Vikriti(kapha: "23", pitta: '23', vata: "34");
@@ -668,8 +687,8 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
             data_auyrthm[2].toString().trim() != "") {
           print("data_auyrthm[2]" + data_auyrthm[2].toString());
           ayuRythmPostModel.vikriti =
-              /* Vikriti(kapha: "36.10",pitta: "25.00",vata: "38.90");*/
-              Vikriti.fromJson(jsonDecode(data_auyrthm[2]));
+          /* Vikriti(kapha: "36.10",pitta: "25.00",vata: "38.90");*/
+          Vikriti.fromJson(jsonDecode(data_auyrthm[2]));
         } else {
           ayuRythmPostModel.vikriti =
               Vikriti(kapha: '56', pitta: "45", vata: "67");
@@ -750,22 +769,22 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
                 ),
                 (isSearchShow)
                     ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Container(
-                          child: TextField(
-                            onChanged: (value) => _runFilter(value),
-                            decoration: InputDecoration(
-                                suffixIcon: Icon(Icons.search),
-                                hintText:
-                                    MyLocalizations.of(context).text("SEARCH")),
-                          ),
-                        ),
-                      )
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Container(
+                    child: TextField(
+                      onChanged: (value) => _runFilter(value),
+                      decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.search),
+                          hintText:
+                          MyLocalizations.of(context).text("SEARCH")),
+                    ),
+                  ),
+                )
                     : Container(),
                 SizedBox(
                   height: 8,
                 ),
-                Row(
+                /*  Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -817,7 +836,7 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
                 ),
                 SizedBox(
                   height: 10,
-                ),
+                ),*/
                 Container(
                   color: AppData.grey,
                   height: 40.0,
@@ -884,139 +903,128 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
                     ],
                   ),
                 ),
-                (appointModel != null &&
-                        appointModel.body != null &&
-                        appointModel.body.length > 0)
+                (patientModel != null &&
+                    patientModel.body != null &&
+                    patientModel.body.length > 0)
                     ? ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
-                        itemCount: foundUser.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(vertical: 3),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    /*Expanded(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
+                    itemCount: foundUser1.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: 3),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                /*Expanded(
                                       child: Text(
                                         appointModel.appointList[index].id,
                                         style: TextStyle(color: Colors.black),
                                         textAlign: TextAlign.start,
                                       ),
                                     ),*/
-                                    SizedBox(
-                                      width: 60,
-                                      child: Text(
-                                        foundUser[index].regNo,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                        ),
-                                      ),
+                                SizedBox(
+                                  width: 60,
+                                  child: Text(
+                                    foundUser1[index].patientId??"",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
                                     ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        foundUser[index].patientName,
-                                        style: TextStyle(color: Colors.black),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    /*Expanded(
-                                      child: Text(
-                                        appointModel.appointList[index].age,
-                                        style: TextStyle(color: Colors.black),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),*/
-                                    SizedBox(
-                                      width: 60,
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) =>  TestPerfromPage(
-                                              model: widget.model,
-                                            )),
-                                          );
-                                        },
-                                        child: Text(
-                                          (foundUser[index].age != null)
-                                              ? foundUser[index].age.toString()
-                                              : "N/A",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 60,
-                                      child: Text(
-                                        (foundUser[index].gender != null)
-                                            ? foundUser[index].gender[0]
-                                            : "N/A",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 80,
-                                      child: InkWell(
-                                        onTap: () {
-                                          openAlertBox(foundUser[index]);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(2.0)),
-                                            border:
-                                                Border.all(color: Colors.black),
-                                          ),
-                                          alignment: Alignment.topLeft,
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 2, horizontal: 3),
-                                          child: Text(
-                                            foundUser[index].appntmntStatus,
-                                            style: TextStyle(
-                                                color: Colors.green,
-                                                decoration:
-                                                    TextDecoration.underline),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                              Divider(
-                                color: Colors.grey,
-                              ),
-                            ],
-                          );
-                        })
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    foundUser1[index].patientName??"",
+                                    style: TextStyle(color: Colors.black),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 60,
+                                  child: Text(
+                                    ( foundUser1[index].age != null)
+                                        ? foundUser1[index].age.toString()
+                                        : "N/A",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 60,
+                                  child: Text(
+                                    (foundUser1[index].gender != null)
+                                        ? foundUser1[index].gender
+                                        : "N/A",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 80,
+                                  child: InkWell(
+                                    onTap: () {
+                                      widget.model.patientList = foundUser1[index];
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) =>  TestPerfromPage(
+                                          model: widget.model,
+                                        )),
+                                      );
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(2.0)),
+                                        border:
+                                        Border.all(color: Colors.black),
+                                      ),
+                                      // alignment: Alignment.topLeft,
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 2, horizontal: 3),
+                                      child: Text(
+                                        foundUser1[index].status??"Start",
+                                        style: TextStyle(
+                                            color: Colors.green,
+                                            decoration:
+                                            TextDecoration.underline),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Divider(
+                            color: Colors.grey,
+                          ),
+                        ],
+                      );
+                    })
                     : (isDataNotAvail)
-                        ? Container(
-                            height: size.height - 100,
-                            child: Center(
-                                child: Image.asset(
-                              "assets/NoRecordFound.png",
-                              // height: 25,
-                            )),
-                          )
-                        : MyWidgets.loading(context),
+                    ? Container(
+                  height: size.height - 100,
+                  child: Center(
+                      child: Image.asset(
+                        "assets/NoRecordFound.png",
+                        // height: 25,
+                      )),
+                )
+                    : MyWidgets.loading(context),
               ],
             ),
           ),
@@ -1069,7 +1077,7 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
                   TextInputType.number, "name", weight),
               Padding(
                 padding:
-                    const EdgeInsets.only(left: 13.0, right: 13.0, bottom: 7.0),
+                const EdgeInsets.only(left: 13.0, right: 13.0, bottom: 7.0),
                 child: Container(
                   child: Padding(
                     padding: const EdgeInsets.only(

@@ -3,6 +3,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:user/models/AbhaTokenModel.dart';
 import 'package:user/models/ForgetUseridModel.dart' as forgotuser;
 import 'package:user/models/MasterLoginResponse.dart';
+import 'package:user/models/PatientModel.dart';
 import 'package:user/models/PharmacyorderModel.dart' as cnfrm;
 import 'package:user/models/TakeMedModel.dart';
 import 'package:user/models/UserListModel.dart' as test;
@@ -12,7 +13,7 @@ import 'package:user/models/PatientListModel.dart' as patiet;
 import 'package:user/models/DocterAppointmentlistModel.dart' as doc;
 import 'package:user/models/AppointmentlistModel.dart' as pharma;
 import 'package:user/models/MedicineListModel.dart' as medicine;
-
+import 'package:user/models/LabBookModel.dart' as localBookModel;
 class PassData extends Model {
   String empid;
   String phnNo;
@@ -208,6 +209,7 @@ String txnIDAdhar;
 String abhaadhar;
 String abhaphoneno;
 
-
+  localBookModel.Body localBookModelBody;
+  PatientListBody patientList;
 
 }

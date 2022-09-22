@@ -316,11 +316,12 @@ class _LabDashboardState extends State<LabDashboard> {
                         _buildTilered(
                           icon: "assets/images/testlab.png",
                           fun: () {
-                            // AppData.showInSnackDone(context, "Coming Soon");
+
+                            /* Navigator.pushNamed(
+                                context, "/testappointmentpage");*/
                             Navigator.pushNamed(
-                                context, "/testappointmentpage");
-                           /* openAlertBox();*/
-                            //AppData.showInSnackBar(context, "Coming soon");
+                                context, "/testappointmentnewpage");
+
                           },
                           //color: AppData.BG2BLUE,
                           color: AppData.BG1RED,
@@ -342,15 +343,7 @@ class _LabDashboardState extends State<LabDashboard> {
                             //overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        /*Align(
-                                          alignment: Alignment.center,
-                                          child: Expanded(
-                                            child: Text(
-                                              "Health               chat",
-                                              style: TextStyle(color: Colors.black),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          )),*/
+
                       ]),
                   SizedBox(
                     width: 5,
@@ -455,7 +448,7 @@ class _LabDashboardState extends State<LabDashboard> {
                     width: double.infinity,
                     child: Padding(
                       padding:
-                          EdgeInsets.only(left: 20.0, top: 40.0, bottom: 20.0),
+                      EdgeInsets.only(left: 20.0, top: 40.0, bottom: 20.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -509,7 +502,7 @@ class _LabDashboardState extends State<LabDashboard> {
                       width: size.width,
                       height: 60,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                      EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                       margin: EdgeInsets.only(top: 10.0),
                       decoration: BoxDecoration(
                         // color: Colors.grey.withOpacity(0.5),
@@ -567,9 +560,9 @@ class _LabDashboardState extends State<LabDashboard> {
                     //Navigator.pushNamed(context, "/dashboard");
                     // Navigator.pushNamed(context, "/dashboard1");
                   }
-                  // onTap: (){},
+                // onTap: (){},
 
-                  ),
+              ),
               ListTile(
                 leading: Image.asset(
                   "assets/images/myprofile.png",
@@ -670,7 +663,7 @@ class _LabDashboardState extends State<LabDashboard> {
                     height: 30,
                   ),
                   title:
-                      Text(MyLocalizations.of(context).text("PEAK_FLOW_APP")),
+                  Text(MyLocalizations.of(context).text("PEAK_FLOW_APP")),
                   selected: _selectedDestination == 8,
                   onTap: () {
                     selectDestination(8);
@@ -692,7 +685,7 @@ class _LabDashboardState extends State<LabDashboard> {
                   ],
                 ),
                 title:
-                    Text(MyLocalizations.of(context).text("CHANGE_PASSWORD")),
+                Text(MyLocalizations.of(context).text("CHANGE_PASSWORD")),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, "/changePassword");
@@ -899,11 +892,11 @@ class _LabDashboardState extends State<LabDashboard> {
 
   Widget _buildTile1(
       {IconData icon,
-      String title,
-      double size,
-      Color bordercolor,
-      Color color,
-      Function fun}) {
+        String title,
+        double size,
+        Color bordercolor,
+        Color color,
+        Function fun}) {
     return InkWell(
       onTap: fun,
       child: Container(
@@ -913,7 +906,7 @@ class _LabDashboardState extends State<LabDashboard> {
         width: (MediaQuery.of(context).size.width - 60) / 2,
         decoration: BoxDecoration(
 
-            /// borderRadius: BorderRadius.circular(7.0),
+          /// borderRadius: BorderRadius.circular(7.0),
             borderRadius: BorderRadius.only(
               topLeft: Radius.zero,
               topRight: Radius.circular(10.0),
@@ -1013,11 +1006,11 @@ class _LabDashboardState extends State<LabDashboard> {
 
   Widget _buildTile2(
       {IconData icon,
-      String title,
-      double size,
-      Color bordercolor,
-      Color color,
-      Function fun}) {
+        String title,
+        double size,
+        Color bordercolor,
+        Color color,
+        Function fun}) {
     return InkWell(
       onTap: fun,
       child: Container(
@@ -1027,7 +1020,7 @@ class _LabDashboardState extends State<LabDashboard> {
         width: (MediaQuery.of(context).size.width - 60) / 2,
         decoration: BoxDecoration(
 
-            /// borderRadius: BorderRadius.circular(7.0),
+          /// borderRadius: BorderRadius.circular(7.0),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10.0),
               topRight: Radius.zero,
@@ -1290,11 +1283,11 @@ class _LabDashboardState extends State<LabDashboard> {
 
   Widget _buildTilered(
       {String icon,
-      String title,
-      double size,
-      Color bordercolor,
-      Color color,
-      Function fun}) {
+        String title,
+        double size,
+        Color bordercolor,
+        Color color,
+        Function fun}) {
     return InkWell(
       onTap: fun,
       child: Container(
@@ -1305,7 +1298,7 @@ class _LabDashboardState extends State<LabDashboard> {
         width: 100,
         decoration: BoxDecoration(
 
-            /// borderRadius: BorderRadius.circular(7.0),
+          /// borderRadius: BorderRadius.circular(7.0),
             borderRadius: BorderRadius.only(
               topLeft: Radius.zero,
               topRight: Radius.circular(10.0),
@@ -1344,13 +1337,13 @@ class _LabDashboardState extends State<LabDashboard> {
 
   Widget _buildTileblue(
       {
-      /*IconData icon,*/
-      String icon,
-      String title,
-      double size,
-      Color bordercolor,
-      Color color,
-      Function fun}) {
+        /*IconData icon,*/
+        String icon,
+        String title,
+        double size,
+        Color bordercolor,
+        Color color,
+        Function fun}) {
     return InkWell(
       onTap: fun,
       child: Container(
@@ -1360,7 +1353,7 @@ class _LabDashboardState extends State<LabDashboard> {
         width: 100,
         decoration: BoxDecoration(
 
-            /// borderRadius: BorderRadius.circular(7.0),
+          /// borderRadius: BorderRadius.circular(7.0),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10.0),
               topRight: Radius.zero,
@@ -1398,12 +1391,12 @@ class _LabDashboardState extends State<LabDashboard> {
 
   Widget _buildTile(
       {String icon,
-      /*IconData icon,*/
-      String title,
-      double size,
-      Color bordercolor,
-      Color color,
-      Function fun}) {
+        /*IconData icon,*/
+        String title,
+        double size,
+        Color bordercolor,
+        Color color,
+        Function fun}) {
     return InkWell(
       onTap: fun,
       child: Container(
