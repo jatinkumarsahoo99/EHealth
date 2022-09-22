@@ -939,6 +939,7 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
                                       width: 60,
                                       child: InkWell(
                                         onTap: () {
+                                          widget.model.localBookModelBody = foundUser[index];
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(builder: (context) =>  TestPerfromPage(

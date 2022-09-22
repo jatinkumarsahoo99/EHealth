@@ -202,34 +202,32 @@ class _TestPerfromPageState extends State<TestPerfromPage> {
                                           //dataRowHeight: 3,
                                           columnSpacing: 3,
 
-                                          horizontalMargin: 6,
-                                          headingRowHeight: 35,
-                                          dataRowHeight: 35,
+                                horizontalMargin: 6,
+                                headingRowHeight: 35,
+                                dataRowHeight: 35,
 
-                                          border: TableBorder.all(
-                                              color: Colors.white),
-                                          headingRowColor:
-                                              MaterialStateColor.resolveWith(
-                                                  (states) => Colors.blue),
-                                          // sortColumnIndex: 1,
-                                          sortAscending: true,
-                                          columns: <DataColumn>[
-                                            DataColumn2(
-                                              label: Container(
-                                                child: Text(
-                                                  'Test',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 13),
-                                                ),
-                                              ),
-                                              size: ColumnSize.L,
-                                            ),
-                                            DataColumn2(
-                                              size: ColumnSize.S,
+                                border: TableBorder.all(color: Colors.white),
+                                headingRowColor: MaterialStateColor.resolveWith(
+                                        (states) => Colors.blue
+                                ),
+                                // sortColumnIndex: 1,
+                                sortAscending: true,
+                                columns: <DataColumn>[
+                                  DataColumn2(
+                                    label: Container(
+                                      child: Text(
+                                        'Test',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize:13),
+                                      ),
+                                    ),
+                                    size: ColumnSize.L,
+                                  ),
+                                  DataColumn2(
+                                    size: ColumnSize.S,
 
                                               label: Container(
                                                 width: 120,

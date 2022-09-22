@@ -329,6 +329,7 @@ class _TestAppointmentNewPageState extends State<TestAppointmentNewPage>
           });
         });
   }
+
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,

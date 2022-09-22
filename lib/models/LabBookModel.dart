@@ -2,7 +2,7 @@ class LabBookModel {
   List<Body> body;
   String message;
   String code;
-  Null total;
+  String total;
 
   LabBookModel({this.body, this.message, this.code, this.total});
 
