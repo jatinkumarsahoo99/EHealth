@@ -14,11 +14,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Please download iLAB Mini APP to continue the test. This is a one time setup."
         android:padding="15sp"
-        android:textSize="20sp"
+        android:text="Please download this APP to continue the test. This is a one time setup."
         android:textColor="#000000"
-        />
+        android:textSize="20sp" />
+
     <LinearLayout
 
         android:layout_width="match_parent"

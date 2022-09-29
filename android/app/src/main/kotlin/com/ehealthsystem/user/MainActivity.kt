@@ -38,36 +38,71 @@ class MainActivity : FlutterActivity() {
             this.result = result
             if (call.method == "getBatteryLevel") {
 
-            } else if (call.method == "intentTest") {
+            }
+            else if (call.method == "intentTest") {
+                var isAppInstalled = appInstalledOrNot("com.safey.lungmonitoring")
+                if (isAinaPackageAvailableSpiro(this@MainActivity)) {
+                    if (isAppInstalled)
+                    {
+                        val string: String = call.arguments as String
+                        val data: List<String> = string.split(",")
 
-                val string: String = call.arguments as String
-                val data: List<String> = string.split(",")
-
-                val LaunchIntent = packageManager
-                    .getLaunchIntentForPackage("com.safey.lungmonitoring")
-                LaunchIntent!!.action = Intent.ACTION_SEND
+                        val LaunchIntent = packageManager
+                            .getLaunchIntentForPackage("com.safey.lungmonitoring")
+                        LaunchIntent!!.action = Intent.ACTION_SEND
 //                LaunchIntent.setAction(Intent.ACTION_VIEW)
 //                LaunchIntent.putExtra(Intent.EXTRA_TEXT, "Sanjaya Your App is Good")
-                LaunchIntent.putExtra("FirstName", data[0])
-                LaunchIntent.putExtra("LastName", data[1])
-                LaunchIntent.putExtra("Gender", data[2])
-                LaunchIntent.putExtra("Height", data[3])
-                LaunchIntent.putExtra("ethnicity", data[4])
-                LaunchIntent.putExtra("avatar", "")
-                LaunchIntent.putExtra("HeightUnit", "1")
-                LaunchIntent.putExtra("BirthDate", data[7])
-                LaunchIntent.putExtra("UHID", data[5])
-                LaunchIntent.putExtra("Age", data[6])
+                        LaunchIntent.putExtra("FirstName", data[0])
+                        LaunchIntent.putExtra("LastName", data[1])
+                        LaunchIntent.putExtra("Gender", data[2])
+                        LaunchIntent.putExtra("Height", data[3])
+                        LaunchIntent.putExtra("ethnicity", data[4])
+                        LaunchIntent.putExtra("avatar", "")
+                        LaunchIntent.putExtra("HeightUnit", "1")
+                        LaunchIntent.putExtra("BirthDate", data[7])
+                        LaunchIntent.putExtra("UHID", data[5])
+                        LaunchIntent.putExtra("Age", data[6])
+                        LaunchIntent.putExtra("createdDate", data[8])
+                        LaunchIntent.putExtra("createdTime", data[9])
+                        LaunchIntent.putExtra("vendorId", data[10])
 //                LaunchIntent.putExtra("weight", data.get(5))
 //                LaunchIntent.putExtra("age", data.get(6))
-                LaunchIntent.type = "text/plain"
-                /* val t = Toast.makeText(
-                     this@MainActivity,
-                     "Height: " + data.get(4) + " Weight: " + data.get(5),
-                     Toast.LENGTH_SHORT
-                 )
-                 t.show()*/
-                startActivity(LaunchIntent)
+                        LaunchIntent.type = "text/plain"
+                        /* val t = Toast.makeText(
+                             this@MainActivity,
+                             "Height: " + data.get(4) + " Weight: " + data.get(5),
+                             Toast.LENGTH_SHORT
+                         )
+                         t.show()*/
+                        startActivity(LaunchIntent)
+
+                    }
+                    else{
+                        redirectToPlayStore2("https://drive.google.com/file/d/1lSscdZYVNGC-THEJciZNH4ZsVDPINTb4/view?usp=sharing");
+
+                    }
+                }
+                else{
+                    var dialog = Dialog(this@MainActivity)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) //before
+                    dialog.setContentView(R.layout.noapkdialog)
+                    val downloadbtn: Button = dialog.findViewById(R.id.downloadbtn) as Button
+                    downloadbtn.setOnClickListener(object : View.OnClickListener {
+                        override fun onClick(view: View?) {
+                            // Do some work here
+                            redirectToPlayStore2("https://drive.google.com/file/d/1lSscdZYVNGC-THEJciZNH4ZsVDPINTb4/view?usp=sharing");
+                        }
+
+                    })
+                    val cancelbtn: Button = dialog.findViewById(R.id.cancelbtn) as Button
+                    cancelbtn.setOnClickListener(object : View.OnClickListener {
+                        override fun onClick(view: View?) {
+                            dialog.dismiss()
+                        }
+                    })
+                    dialog.show()
+                }
+
             }
             else if (call.method == "writzo") {
                 val string: String = call.arguments as String
@@ -111,49 +146,81 @@ class MainActivity : FlutterActivity() {
 
                 }
 
-            } else if (call.method == "call_nadi") {
-                val string: String = call.arguments as String
-                val data: List<String> = string.split(",")
+            }
+            else if (call.method == "call_nadi") {
+
+                var isAppInstalled = appInstalledOrNot("com.example.ehs_app")
+                if (isAinaPackageAvailableNadi(this@MainActivity)) {
+                    if (isAppInstalled){
+                        val string: String = call.arguments as String
+                        val data: List<String> = string.split(",")
 //                val LaunchIntent = packageManager
 //                    .getLaunchIntentForPackage("com.example.ehs_app")
-               /* val LaunchIntent = packageManager
-                    .getLaunchIntentForPackage("com.example.untitled")
-                LaunchIntent!!.action = Intent.ACTION_SEND*/
-                val intent = Intent()
+                        /* val LaunchIntent = packageManager
+                             .getLaunchIntentForPackage("com.example.untitled")
+                         LaunchIntent!!.action = Intent.ACTION_SEND*/
+                        val intent = Intent()
 
-                intent.setComponent(
-                    ComponentName(
-                        "com.example.ehs_app",
-                        "com.example.ehs_app.MainActivity",
-                    )
-                )
+                        intent.setComponent(
+                            ComponentName(
+                                "com.example.ehs_app",
+                                "com.example.ehs_app.MainActivity",
+                            )
+                        )
 
-                intent.setAction("com.example.ehs_app")
-                intent.action = Intent.ACTION_SEND
-                intent.putExtra("UHID", data[0])
+                        intent.setAction("com.example.ehs_app")
+                        intent.action = Intent.ACTION_SEND
+                        intent.putExtra("UHID", data[0])
 //                intent.putExtra(Intent.EXTRA_TEXT, "Jatin")
-                intent.putExtra("Age", data[1])
+                        intent.putExtra("Age", data[1])
 
-                intent.putExtra("Gender",data[2])
+                        intent.putExtra("Gender",data[2])
 
-                intent.putExtra("Name",data[3])
+                        intent.putExtra("Name",data[3])
 
 
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
-                intent.setType("text/plain")
+                        intent.setType("text/plain")
 
-                intent.toUri(Intent.URI_INTENT_SCHEME)
+                        intent.toUri(Intent.URI_INTENT_SCHEME)
 
-                try {
+                        try {
 
-                    startActivityForResult(intent, 1003)
+                            startActivityForResult(intent, 1003)
 
-                } catch (e: Exception) {
+                        } catch (e: Exception) {
 
-                    //Log.v("DATA_TRANSFER", e.message!!)
+                            //Log.v("DATA_TRANSFER", e.message!!)
 
+                        }
+
+                    }
+                    else{
+                        redirectToPlayStore2("https://drive.google.com/file/d/1a2nbNlYqLgDklNIdf0Svn6Jw5hOtgeyC/view?usp=sharing");
+
+                    }
+                }else{
+                    var dialog = Dialog(this@MainActivity)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) //before
+                    dialog.setContentView(R.layout.noapkdialog)
+                    val downloadbtn: Button = dialog.findViewById(R.id.downloadbtn) as Button
+                    downloadbtn.setOnClickListener(object : View.OnClickListener {
+                        override fun onClick(view: View?) {
+                            // Do some work here
+                            redirectToPlayStore2("https://drive.google.com/file/d/1a2nbNlYqLgDklNIdf0Svn6Jw5hOtgeyC/view?usp=sharing");
+                        }
+
+                    })
+                    val cancelbtn: Button = dialog.findViewById(R.id.cancelbtn) as Button
+                    cancelbtn.setOnClickListener(object : View.OnClickListener {
+                        override fun onClick(view: View?) {
+                            dialog.dismiss()
+                        }
+                    })
+                    dialog.show()
                 }
+
 
             }
             else if (call.method == "ayurythm") {
@@ -194,18 +261,21 @@ class MainActivity : FlutterActivity() {
                 startActivityForResult(intent, 123)
 
 
-            } else if (call.method == "callUrl") {
+            }
+            else if (call.method == "callUrl") {
                 //val intent = Intent(this, WebViewActivity::class.java)
                 //intent.putExtra("key", value)
                 //startActivity(intent)
-            } else if (call.method == "deviceId") {
+            }
+            else if (call.method == "deviceId") {
                 var value = getIMEIDeviceId(this@MainActivity)
                 if (value != null)
                     result.success(value)
                 else
                     result.success("Nothing getting")
 
-            } else if (call.method == "iLab") {
+            }
+            else if (call.method == "iLab") {
 
                 var isAppInstalled = appInstalledOrNot("ilabmini.in.ilab")
                 if (isAinaPackageAvailable(this@MainActivity)) {
@@ -355,6 +425,12 @@ class MainActivity : FlutterActivity() {
         startActivity(i)
     }
 
+    fun redirectToPlayStore2(url:String) {
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse(url)
+        startActivity(i)
+    }
+
 
     fun redirectToPlayStore1() {
         val url =
@@ -382,6 +458,32 @@ class MainActivity : FlutterActivity() {
         packages = pm.getInstalledApplications(0)
         for (packageInfo in packages) {
             if (packageInfo.packageName.contains("ilabmini.in.ilab")) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun isAinaPackageAvailableSpiro(context: Context): Boolean {
+        val packages: List<ApplicationInfo>
+        val pm: PackageManager
+        pm = context.getPackageManager()
+        packages = pm.getInstalledApplications(0)
+        for (packageInfo in packages) {
+            if (packageInfo.packageName.contains("com.safey.lungmonitoring")) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun isAinaPackageAvailableNadi(context: Context): Boolean {
+        val packages: List<ApplicationInfo>
+        val pm: PackageManager
+        pm = context.getPackageManager()
+        packages = pm.getInstalledApplications(0)
+        for (packageInfo in packages) {
+            if (packageInfo.packageName.contains("com.example.ehs_app")) {
                 return true
             }
         }

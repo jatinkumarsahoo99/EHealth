@@ -5,11 +5,13 @@ import 'dart:io';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:user/localization/localizations.dart';
 import 'package:user/models/AyuRythmDataModel.dart';
 import 'package:user/models/AyuRythmPostModel.dart';
 import 'package:user/models/NadiModel.dart';
@@ -45,11 +47,12 @@ class _TestPerfromPageState extends State<TestPerfromPage> {
   TextEditingController dateOfBirth = TextEditingController();
   TextEditingController patientHeight = TextEditingController();
   TextEditingController patientWeight = TextEditingController();
-
+  Color bgColor = Colors.white;
   List<String> data = ['Inhouse', 'Writzo', 'Spiro', 'Ayruthm'];
   List<bool> viewStatus = [];
   List<int> count = [];
   List<String>venderName=[];
+  List<String>venderId=[];
   var dio = Dio();
   String dateofBirth1;
   static const platform = AppData.channel;
@@ -58,19 +61,30 @@ class _TestPerfromPageState extends State<TestPerfromPage> {
   var testNameId;
   TestTypeModel testTypeModel;
   int age=0;
+  String today;
+  String time;
+  TimeOfDay selectedTime = TimeOfDay.now();
   @override
   void initState() {
     /* data.forEach((element) {
       viewStatus.add(false);
     });*/
-    callApi();
+    final df = new DateFormat('yyyy-MM-dd');
+    final df1 = new DateFormat('HH:mm:ss');
+    //final df = new DateFormat('yyyy/MM/dd');
+    selectedTime = TimeOfDay.now();
+    today = df.format(DateTime.now());
+    time = Const.getTimeForm(time:selectedTime.hour.toString() )+":"+Const.getTimeForm(time:selectedTime.minute.toString() )+":"+"00";
+
+    callApi(today,time);
     // print("id"+widget.model.localBookModelBody.regNo);
     super.initState();
   }
 
-  callApi() {
+  callApi(String date,String time1) {
     widget.model.GETMETHODCALL(
-        api: ApiFactory.GET_AllTest + widget.model.patientList.patientId,
+        api: ApiFactory.GET_AllTest + widget.model.patientList.patientId+"&date="+date+"&time="+time1,
+        // api: ApiFactory.GET_AllTest + widget.model.patientList.patientId,
         /*  api:
         "http://api-demo.ehealthsystem.com/nirmalyaRest/api/view-vle-vender-testlist?patientId=9121997046982259",*/
         fun: (Map<String, dynamic> map) {
@@ -95,6 +109,8 @@ class _TestPerfromPageState extends State<TestPerfromPage> {
                   List.generate(testTypeModel.body.length, (index) => []);
               venderName =
                   List.generate(testTypeModel.body.length, (index) => "");
+              venderId =
+                  List.generate(testTypeModel.body.length, (index) => "");
             } else {
               AppData.showInSnackBar(context, msg);
             }
@@ -102,394 +118,622 @@ class _TestPerfromPageState extends State<TestPerfromPage> {
         });
   }
 
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        locale: Locale("en"),
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now().subtract(Duration(days: 365)),
+        lastDate:
+        DateTime.now().add(Duration(days: 276))); //18 years is 6570 days
+    //if (picked != null && picked != selectedDate)
+    setState(() {
+      // isDataNotAvail = false;
+      final df = new DateFormat('yyyy-MM-dd');
+      final df1 = new DateFormat('hh:mm:ss');
+      //final df = new DateFormat('yyyy/MM/dd');
+      today = df.format(picked?? DateTime.now());
+      // time = df1.format(picked?? DateTime.now());
+      callApi(today,time);
+    });
+  }
+  _selectTime(BuildContext context) async {
+    final TimeOfDay timeOfDay = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+
+      initialEntryMode: TimePickerEntryMode.dial,
+    );
+    if(timeOfDay != null && timeOfDay != selectedTime)
+    {
+      setState(() {
+        selectedTime = timeOfDay;
+        // time = selectedTime.hour.toString()+":"+selectedTime.minute.toString()+":"+"00";
+        time = Const.getTimeForm(time:selectedTime.hour.toString() )+":"+Const.getTimeForm(time:selectedTime.minute.toString() )+":"+"00";
+        print(">>>>>>>>>>"+time);
+        callApi(today,time);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
+          // leading: BackButton(
+          //   color: bgColor,
+          // ),
+          title: InkWell(
+            onTap: () {
+              /*   callApi();*/
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 75.0),
+              child: Text(
+                "START TEST",
+                style: TextStyle(color: bgColor),
+              ),
+            ),
+          ),
+          titleSpacing: 2,
           backgroundColor: AppData.matruColor,
         ),
         body: (testTypeModel != null)
-            ? Padding(
-                padding:
-                    const EdgeInsets.only(top: 3, bottom: 3, left: 3, right: 3),
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    itemCount: testTypeModel.body.length,
-                    itemBuilder: (context, i) {
-                      // print("token>>>"+widget.model.token.toString());
-                      return Column(
+            ? Column(
+              children: [
+                SizedBox(
+                  height: 1,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10.0, top: 8.0, bottom: 4),
+                      child:
+                      Row(
                         children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                viewStatus[i] = !viewStatus[i];
-                                testName1[i].clear();
-                                testNameId[i].clear();
-                                // venderName.removeAt(i);
-                                venderName[i]="";
-                                print("testName" + testName1[i].toString());
-                                print("testId" + testNameId[i].toString());
-                                testTypeModel.body[i].getvendertestLists
-                                    .forEach((element) {
-                                  element.isSelected = false;
-                                });
-                                // callCustomerApi();
-                              });
-                            },
-                            child: Container(
-                              color: /*(data[i].toUpperCase()=="INHOUSE")?Colors.green:*/
-                                  Color(0xFFf26666),
-                              // height: size.height * 0.07,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      (testTypeModel.body[i].type ?? "")
-                                          .toUpperCase(),
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                    ),
-                                    Row(
-                                      children: [
-                                        (testTypeModel.body[i].status != null &&
-                                                testTypeModel.body[i].status
-                                                        .trim() !=
-                                                    "")
-                                            ? Text(
-                                                "Completed".toUpperCase(),
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16),
-                                              )
-                                            : Text(
-                                                "Pending".toUpperCase(),
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16),
-                                              ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Icon(
-                                            viewStatus[i] == false
-                                                ? Icons.keyboard_arrow_down
-                                                : Icons.keyboard_arrow_up,
-                                            color: Colors.white),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
+                          Container(
+                            child: Text("Date: ",  style: TextStyle(
+                                fontWeight: FontWeight.bold
+                            ),),
                           ),
-                          Visibility(
-                            visible: viewStatus[i],
-                            child: (testTypeModel != null &&
-                                    testTypeModel.body[i].getvendertestLists
-                                            .length !=
-                                        0)
-                                ? Column(
-                                    children: [
-                                      Container(
-                                        // height: size.height * 0.1,
-                                        child: DataTable2(
-                                          onSelectAll: (b) {},
-                                          //dataRowHeight: 3,
-                                          columnSpacing: 3,
-
-                                horizontalMargin: 6,
-                                headingRowHeight: 35,
-                                dataRowHeight: 35,
-
-                                border: TableBorder.all(color: Colors.white),
-                                headingRowColor: MaterialStateColor.resolveWith(
-                                        (states) => Colors.blue
-                                ),
-                                // sortColumnIndex: 1,
-                                sortAscending: true,
-                                columns: <DataColumn>[
-                                  DataColumn2(
-                                    label: Container(
-                                      child: Text(
-                                        'Test',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize:13),
-                                      ),
+                          Container(
+                            width: size.width*0.23,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppData.matruColor,
+                                width: 2.0,
+                                style: BorderStyle.solid,
+                              ),
+                              color:  AppData.matruColor,
+                              borderRadius: const BorderRadius.all(Radius.circular(2.0)),
+                            ),
+                            child: GestureDetector(
+                              onTap: (){
+                                _selectDate(context);
+                              },
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 3,bottom: 3,right: 2,left: 2),
+                                    child: Text(today.toString(),
+                                      style: TextStyle(
+                                      color: Colors.white,
                                     ),
-                                    size: ColumnSize.L,
+                                    ),
                                   ),
-                                  DataColumn2(
-                                    size: ColumnSize.S,
-
-                                              label: Container(
-                                                width: 120,
-                                                child: Text(
-                                                  "Status",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 13),
-                                                ),
-                                              ),
-                                              numeric: false,
-                                              //tooltip: "Description",
-                                            ),
-                                            DataColumn2(
-                                              size: ColumnSize.S,
-                                              label: Container(
-                                                width: 100.0,
-                                                child: Text(
-                                                  "Action",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 13),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                          rows:
-                                              testTypeModel
-                                                  .body[i].getvendertestLists
-                                                  .map(
-                                                    (e) => DataRow(
-                                                      // selected: true,
-                                                      cells: [
-                                                        DataCell(
-                                                          Container(
-                                                            width: 150,
-                                                            child: Row(
-                                                              children: [
-                                                                (e.status.trim() =="Pending")? Container(
-                                                                  width: 30,
-                                                                  child:
-                                                                      Checkbox(
-                                                                    value: e
-                                                                        .isSelected,
-                                                                    onChanged:
-                                                                        (value) {
-                                                                      if (value) {
-                                                                        if(testName1[i].length == 0){
-                                                                          venderName[i]="";
-                                                                        }
-                                                                        if(venderName[i].trim() =="" ||
-                                                                            venderName[i].toLowerCase() ==e.venderName.toLowerCase() ){
-                                                                          print("Vender namefrom server>>>>"+e.venderName);
-                                                                          venderName[i]=e.venderName;
-                                                                          e.isSelected =
-                                                                              value;
-                                                                          count[
-                                                                          i]++;
-                                                                          print("$i>>>>>+" +
-                                                                              count[i].toString());
-                                                                          testName1[i]
-                                                                              .add(e.testName);
-                                                                          testNameId[i]
-                                                                              .add(e.testId??" ");
-                                                                          print("testName+ " +
-                                                                              testName1[i].toString());
-                                                                          print("testNameId" +
-                                                                              testNameId[i].toString());
-                                                                          print("Vender name"+venderName[i]);
-                                                                        }else{
-                                                                          /*if(testName1[i].length == 0){
-                                                                            venderName[i]="";
-                                                                          }*/
-                                                                          print("Vender name "+venderName[i]);
-                                                                          print("Vender namefrom server"+e.venderName);
-                                                                          AppData.showInSnackBar(context, "Please select one set of group");
-                                                                        }
-
-                                                                      } else {
-                                                                        print("length>>jks"+testName1[i].length.toString());
-                                                                        if(testName1[i].length == 1){
-                                                                          venderName[i]="";
-                                                                        }
-                                                                        count[
-                                                                            i]--;
-                                                                        print("$i>>>>>-" +
-                                                                            count[i].toString());
-                                                                        testName1[i]
-                                                                            .remove(e.testName);
-                                                                        testNameId[i]
-                                                                            .remove(e.testId);
-                                                                        print("testName- " +
-                                                                            testName1[i].toString());
-                                                                        print("testName- " +
-                                                                            testName1.toString());
-                                                                        print("Vender name"+venderName[i]);
-                                                                        e.isSelected =
-                                                                            value;
-                                                                      }
-                                                                      setState(
-                                                                          () {});
-                                                                    },
-                                                                  ),
-                                                                ):Container(),
-                                                                Container(
-                                                                  width: 120.0,
-                                                                  child: Text(
-                                                                    e.testName ??
-                                                                        "",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .black),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        DataCell(
-                                                          Container(
-                                                            width: 120.0,
-                                                            child: (e.status
-                                                                        .trim() ==
-                                                                    "Pending")
-                                                                ? Text(
-                                                                    e.status ??
-                                                                        "",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .red),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                  )
-                                                                : Text(
-                                                                    "Completed",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .green),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                  ),
-                                                          ),
-                                                          showEditIcon: false,
-                                                          placeholder: false,
-                                                        ),
-                                                        DataCell(
-                                                          (e.status.trim() !=
-                                                                  "Pending")
-                                                              ? Container(
-                                                                  width: 120.0,
-                                                                  child: Icon(
-                                                                    IconData(
-                                                                      0xf635,
-                                                                      fontFamily:
-                                                                          'MaterialIcons',
-                                                                    ),
-                                                                    color: Colors
-                                                                        .green,
-                                                                  ),
-                                                                )
-                                                              : Container(
-                                                                  width: 120.0,
-                                                                  child: Text(
-                                                                    "Start",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .black),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                  ),
-                                                                ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                          // Center(child: Text('No Data')
-                                        ),
-                                      ),
-                                      Container(
-                                        child: FlatButton(
-                                          child: Text(
-                                            'Start',
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          color: Colors.blueAccent,
-                                          textColor: Colors.white,
-                                          onPressed: () {
-                                            // venderName[i] = "Ayurythm";
-                                            if(venderName[i].trim().toLowerCase() == ("Safiey").toLowerCase() ){
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) =>
-                                                      dialogForSpiro(context,i));
-                                            }
-                                            else if( venderName[i].trim().toLowerCase() == ("WRIZTO").toLowerCase() ){
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) =>
-                                                      dialogForWritzo(context,i));
-                                            }
-                                           else if( venderName[i].trim().toLowerCase() == ("Birla").toLowerCase() ){
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) =>
-                                                      dialogForBirla(context,i));
-                                            }
-                                           else if( venderName[i].trim().toLowerCase() == ("Naditarangini").toLowerCase() ){
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) =>
-                                                      dialogForNadiTrangi(context,i));
-                                            }
-                                            else if( venderName[i].trim().toLowerCase() == ("Ayurythm").toLowerCase() ){
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) =>
-                                                      dialogForAyuruthm(context,i));
-
-                                            }else if(venderName[i].trim() !=""){
-                                              AppData.showInSnackBar(context, "Coming Soon....");
-                                            }
-                                            else{
-                                              AppData.showInSnackBar(context, "Please Select at least one test");
-                                            }
-
-                                          },
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                : Container(
-                                    child: Text("Data not found"),
-                                  ),
+                                )),
                           ),
                           SizedBox(
-                            height: size.height * 0.002,
+                            width: size.width*0.15,
+                          ),
+                          Container(
+                            child: Text("Time: ",
+                              style: TextStyle(
+                              fontWeight: FontWeight.bold
+                            ),
+                            ),
+                          ),
+                          Container(
+                            width: size.width*0.23,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppData.matruColor,
+                                width: 2.0,
+                                style: BorderStyle.solid,
+                              ),
+                              color:  AppData.matruColor,
+                              borderRadius: const BorderRadius.all(Radius.circular(2.0)),
+                            ),
+                            child: GestureDetector(
+                                onTap: (){
+                                  _selectTime(context);
+                                },
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 2,bottom: 2,right: 2,left: 2),
+                                    child: Text(time.toString(), style: TextStyle(
+                                      color: Colors.white,
+                                    ),),
+                                  ),
+                                )),
                           ),
                         ],
-                      );
-                    }),
-              )
+                      )
+                   /*   RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: today,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15.0,
+                                color: Colors.black,
+                                decoration: TextDecoration.underline,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  _selectDate(context);
+                                },
+                            ),
+                            TextSpan(
+                              text: "    ",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15.0,
+                                color: Colors.black,
+                                // decoration: TextDecoration.underline,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  // _selectTime(context);
+                                },
+                            ),
+                            TextSpan(
+                              text: time,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15.0,
+                                color: Colors.black,
+                                decoration: TextDecoration.underline,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  _selectTime(context);
+                                },
+                            ),
+                            TextSpan(
+                              text: "    ",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15.0,
+                                color: Colors.black,
+                                // decoration: TextDecoration.underline,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  // _selectTime(context);
+                                },
+                            ),
+                            TextSpan(
+                                text: MyLocalizations.of(context)
+                                    .text("APPOINTMENT")
+                                    .toUpperCase(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15.0,
+                                    color: Colors.black)),
+                          ],
+                        ),
+                      ),*/
+                    ),
+                  ],
+                ),
+                Container(
+                  height: size.height*0.8,
+                  child: Padding(
+                      padding:
+                          const EdgeInsets.only(top: 3, bottom: 3, left: 3, right: 3),
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const ClampingScrollPhysics(),
+                          itemCount: testTypeModel.body.length,
+                          itemBuilder: (context, i) {
+                            // print("token>>>"+widget.model.token.toString());
+                            return Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      viewStatus[i] = !viewStatus[i];
+                                      testName1[i].clear();
+                                      testNameId[i].clear();
+                                      // venderName.removeAt(i);
+                                      venderName[i]="";
+                                      venderId[i]="";
+                                      print("testName" + testName1[i].toString());
+                                      print("testId" + testNameId[i].toString());
+                                      testTypeModel.body[i].getvendertestLists
+                                          .forEach((element) {
+                                        element.isSelected = false;
+                                      });
+                                      // callCustomerApi();
+                                    });
+                                  },
+                                  child: Container(
+                                    color: /*(data[i].toUpperCase()=="INHOUSE")?Colors.green:*/
+                                        Color(0xFFf26666),
+                                    // height: size.height * 0.07,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            (testTypeModel.body[i].type ?? "")
+                                                .toUpperCase(),
+                                            style: TextStyle(
+                                                color: Colors.white, fontSize: 16),
+                                          ),
+                                          Row(
+                                            children: [
+                                              ((testTypeModel.body[i].status != null &&
+                                                      testTypeModel.body[i].status
+                                                               !=
+                                                          "" ) && (testTypeModel.body[i].status != "Pending"))
+                                                  ? Text(
+                                                      "".toUpperCase(),
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16),
+                                                    )
+                                                  : Text(
+                                                      "".toUpperCase(),
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16),
+                                                    ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Icon(
+                                                  viewStatus[i] == false
+                                                      ? Icons.keyboard_arrow_down
+                                                      : Icons.keyboard_arrow_up,
+                                                  color: Colors.white),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: viewStatus[i],
+                                  child: (testTypeModel != null &&
+                                          testTypeModel.body[i].getvendertestLists
+                                                  .length !=
+                                              0)
+                                      ? Column(
+                                          children: [
+                                            Container(
+                                              // height: size.height * 0.1,
+                                              child: DataTable2(
+                                                onSelectAll: (b) {},
+                                                //dataRowHeight: 3,
+                                                columnSpacing: 3,
+
+                                      horizontalMargin: 6,
+                                      headingRowHeight: 35,
+                                      dataRowHeight: 35,
+
+                                      border: TableBorder.all(color: Colors.white),
+                                      headingRowColor: MaterialStateColor.resolveWith(
+                                              (states) => Colors.blue
+                                      ),
+                                      // sortColumnIndex: 1,
+                                      sortAscending: true,
+                                      columns: <DataColumn>[
+                                        DataColumn2(
+                                          label: Container(
+                                            child: Text(
+                                              'Test',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize:13),
+                                            ),
+                                          ),
+                                          size: ColumnSize.L,
+                                        ),
+                                        DataColumn2(
+                                          size: ColumnSize.S,
+
+                                                    label: Container(
+                                                      width: 120,
+                                                      child: Text(
+                                                        "Status",
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 13),
+                                                      ),
+                                                    ),
+                                                    numeric: false,
+                                                    //tooltip: "Description",
+                                                  ),
+                                                  DataColumn2(
+                                                    size: ColumnSize.S,
+                                                    label: Container(
+                                                      width: 100.0,
+                                                      child: Text(
+                                                        "Action",
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 13),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                                rows:
+                                                    testTypeModel
+                                                        .body[i].getvendertestLists
+                                                        .map(
+                                                          (e) => DataRow(
+                                                            // selected: true,
+                                                            cells: [
+                                                              DataCell(
+                                                                Container(
+                                                                  width: 150,
+                                                                  child: Row(
+                                                                    children: [
+                                                                      (e.status.trim() =="Pending")? Container(
+                                                                        width: 30,
+                                                                        child:
+                                                                            Checkbox(
+                                                                          value: e
+                                                                              .isSelected,
+                                                                          onChanged:
+                                                                              (value) {
+                                                                            if (value) {
+                                                                              if(testName1[i].length == 0){
+                                                                                venderName[i]="";
+                                                                                venderId[i]="";
+                                                                              }
+                                                                              if(venderName[i].trim() =="" ||
+                                                                                  venderName[i].toLowerCase() ==e.venderName.toLowerCase() ){
+                                                                                print("Vender namefrom server>>>>"+e.venderName);
+                                                                                venderName[i]=e.venderName;
+                                                                                venderId[i]=e.venderId;
+                                                                                e.isSelected =
+                                                                                    value;
+                                                                                count[
+                                                                                i]++;
+                                                                                print("$i>>>>>+" +
+                                                                                    count[i].toString());
+                                                                                testName1[i]
+                                                                                    .add(e.testName);
+                                                                                testNameId[i]
+                                                                                    .add(e.testId??" ");
+                                                                                print("testName+ " +
+                                                                                    testName1[i].toString());
+                                                                                print("testNameId" +
+                                                                                    testNameId[i].toString());
+                                                                                print("Vender name"+venderName[i]);
+                                                                              }else{
+                                                                                /*if(testName1[i].length == 0){
+                                                                                  venderName[i]="";
+                                                                                }*/
+                                                                                print("Vender name "+venderName[i]);
+                                                                                print("Vender namefrom server"+e.venderName);
+                                                                                AppData.showInSnackBar(context, "Please select one set of group");
+                                                                              }
+
+                                                                            } else {
+                                                                              print("length>>jks"+testName1[i].length.toString());
+                                                                              if(testName1[i].length == 1){
+                                                                                venderName[i]="";
+                                                                                venderId[i]="";
+                                                                              }
+                                                                              count[
+                                                                                  i]--;
+                                                                              print("$i>>>>>-" +
+                                                                                  count[i].toString());
+                                                                              testName1[i]
+                                                                                  .remove(e.testName);
+                                                                              testNameId[i]
+                                                                                  .remove(e.testId);
+                                                                              print("testName- " +
+                                                                                  testName1[i].toString());
+                                                                              print("testName- " +
+                                                                                  testName1.toString());
+                                                                              print("Vender name"+venderName[i]);
+                                                                              e.isSelected =
+                                                                                  value;
+                                                                            }
+                                                                            setState(
+                                                                                () {});
+                                                                          },
+                                                                        ),
+                                                                      ):Container(),
+                                                                      Container(
+                                                                        width: 120.0,
+                                                                        child: Text(
+                                                                          e.testName ??
+                                                                              "",
+                                                                          style: TextStyle(
+                                                                              color: Colors
+                                                                                  .black),
+                                                                          textAlign:
+                                                                              TextAlign
+                                                                                  .left,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DataCell(
+                                                                Container(
+                                                                  width: 120.0,
+                                                                  child: (e.status
+                                                                              .trim() ==
+                                                                          "Pending")
+                                                                      ? Text(
+                                                                          e.status ??
+                                                                              "",
+                                                                          style: TextStyle(
+                                                                              color: Colors
+                                                                                  .red),
+                                                                          textAlign:
+                                                                              TextAlign
+                                                                                  .center,
+                                                                        )
+                                                                      : Text(
+                                                                          "Completed",
+                                                                          style: TextStyle(
+                                                                              color: Colors
+                                                                                  .green),
+                                                                          textAlign:
+                                                                              TextAlign
+                                                                                  .center,
+                                                                        ),
+                                                                ),
+                                                                showEditIcon: false,
+                                                                placeholder: false,
+                                                              ),
+                                                              DataCell(
+                                                                (e.status.trim() !=
+                                                                        "Pending")
+                                                                    ? Container(
+                                                                        width: 120.0,
+                                                                        child: Icon(
+                                                                          const IconData(
+                                                                            0xf635,
+                                                                            fontFamily:
+                                                                                'MaterialIcons',
+                                                                          ),
+                                                                          color: Colors
+                                                                              .green,
+                                                                        ),
+                                                                      )
+                                                                    : Container(
+                                                                        width: 120.0,
+                                                                        child: Text(
+                                                                          "Start",
+                                                                          style: TextStyle(
+                                                                              color: Colors
+                                                                                  .black),
+                                                                          textAlign:
+                                                                              TextAlign
+                                                                                  .center,
+                                                                        ),
+                                                                      ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                // Center(child: Text('No Data')
+                                              ),
+                                            ),
+                                            Container(
+                                              child: FlatButton(
+                                                child: Text(
+                                                  'Start',
+                                                  style: TextStyle(fontSize: 20.0),
+                                                ),
+                                                color: Colors.blueAccent,
+                                                textColor: Colors.white,
+                                                onPressed: () {
+                                                  // venderName[i] = "Safiey";
+                                                  if(venderName[i].trim().toLowerCase() == ("Safiey").toLowerCase() ){
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) =>
+                                                            dialogForSpiro(context,i));
+                                                  }
+                                                  else if( venderName[i].trim().toLowerCase() == ("WRIZTO").toLowerCase() ){
+                                                   /* showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) =>
+                                                            dialogForWritzo(context,i));*/
+                                                    AppData.showInSnackBar(context, "Coming Soon....");
+                                                  }
+                                                 else if( venderName[i].trim().toLowerCase() == ("Birla").toLowerCase() ){
+                                                   /* showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) =>
+                                                            dialogForBirla(context,i));*/
+                                                    AppData.showInSnackBar(context, "Coming Soon....");
+                                                  }
+                                                 else if( venderName[i].trim().toLowerCase() == ("Naditarangini").toLowerCase() ){
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) =>
+                                                            dialogForNadiTrangi(context,i));
+                                                  }
+                                                  else if( venderName[i].trim().toLowerCase() == ("Ayurythm").toLowerCase() ){
+                                                    /*showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) =>
+                                                            dialogForAyuruthm(context,i));*/
+                                                    AppData.showInSnackBar(context, "Coming Soon....");
+
+                                                  } else if( venderName[i].trim().toLowerCase() == ("MedTel").toLowerCase() ){
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) =>
+                                                            dialogForMedTel(context,i));
+
+                                                  }else if(venderName[i].trim() !=""){
+                                                    AppData.showInSnackBar(context, "Coming Soon....");
+                                                  }
+                                                  else{
+                                                    AppData.showInSnackBar(context, "Please Select at least one test");
+                                                  }
+
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      : Container(
+                                          child: Text("Data not found"),
+                                        ),
+                                ),
+                                SizedBox(
+                                  height: size.height * 0.002,
+                                ),
+                              ],
+                            );
+                          }),
+                    ),
+                ),
+              ],
+            )
             : Container(
                 child: Center(child: Text("Data Not found")),
               ));
   }
 
-  callNadiApp(String val) async {
+  callNadiApp(String val,String date,String time,String venderId) async {
     var result = await AppData.channel.invokeMethod('call_nadi', val);
     NadiModel nadiModel = NadiModel.fromJson(jsonDecode(result));
+    nadiModel.ehsJsonReport.createdDt=date;
+    nadiModel.ehsJsonReport.createdTm=time;
+    nadiModel.ehsJsonReport.vendorId = venderId;
     log("nadi data" + nadiModel.toJson().toString());
     widget.model.POSTMETHOD(
         api: ApiFactory.API_Nadi,
@@ -514,7 +758,7 @@ class _TestPerfromPageState extends State<TestPerfromPage> {
         initialDate: DateTime.now(),
         // firstDate: DateTime.now(),
         firstDate: DateTime.now().subtract(Duration(days: 30000)),
-        lastDate: DateTime.now().add(Duration(days: 120)));
+        lastDate: DateTime.now().add(Duration(days: 1)));
     if (picked != null) {
       dateOfBirth.text = DateFormat("dd-MM-yyyy").format(picked);
       // dateofBirth.text = picked.toString();
@@ -882,7 +1126,7 @@ class _TestPerfromPageState extends State<TestPerfromPage> {
                     widget.model.patientList.gender +
                     "," +
                     widget.model.patientList.patientName;
-                callNadiApp(mapping);
+                callNadiApp(mapping,today,time,venderId[index]);
                 Navigator.of(context).pop();
               }
 
@@ -1143,6 +1387,8 @@ class _TestPerfromPageState extends State<TestPerfromPage> {
               AppData.showInSnackBar(context, "Please enter date of birth");
             }else if(patientHeight.text == null || patientHeight.text.trim() ==""){
               AppData.showInSnackBar(context, "Please enter height in CM");
+            }else if(dateOfBirth.text.trim() == DateFormat("dd-MM-yyyy").format(DateTime.now())..toString().trim()){
+              AppData.showInSnackBar(context, "Please enter correct date of birth");
             }
             else{
               var inputFormat = DateFormat('dd-MM-yyyy');
@@ -1175,7 +1421,13 @@ class _TestPerfromPageState extends State<TestPerfromPage> {
                     "," +
                     age.toString() +
                     "," +
-                    dateofBirth1;
+                    dateofBirth1 +
+                    ","+
+                    today+
+                    ","+
+                    time +","
+                +venderId[index]??"" ;
+                print("Sending data>>>>"+val);
                 callSpiro(val);
                 Navigator.of(context).pop();
               }
@@ -1188,6 +1440,13 @@ class _TestPerfromPageState extends State<TestPerfromPage> {
       ],
     );
   }
+
+  Future<void> _callLabMedTelApp(String data) async {
+    try {
+      final int result = await platform.invokeMethod('iLab', data);
+    } on PlatformException catch (e) {}
+  }
+
 
   Widget dialogForAyuruthm(BuildContext context,int index) {
     print("Function call");
@@ -1299,6 +1558,133 @@ class _TestPerfromPageState extends State<TestPerfromPage> {
                     "," +
                     widget.model.patientList. gender??"Other";
                 callAyurythm(mapping.trim(), widget.model.patientList.patientId.trim());
+
+                Navigator.of(context).pop();
+              }
+
+            }
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('0k'),
+        ),
+      ],
+    );
+  }
+
+  Widget dialogForMedTel(BuildContext context,int index) {
+    print("Function call");
+    dateOfBirth.text = "";
+    patientHeight.text="";
+    patientWeight.text="";
+    return AlertDialog(
+      contentPadding: EdgeInsets.only(left: 5, right: 5, top: 30),
+      //title: const Text(''),
+      content: StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              //_buildAboutText(),
+              //_buildLogoAttribution(),
+              Text(
+                "FILL UP DETAILS",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(
+                child: Divider(
+                  height: 2,
+                ),
+                width: 180,
+              ),
+              Text(
+                "(" + widget.model.patientList.patientName + ")",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              fromFieldNew("Height(In CM)", TextInputAction.next,
+                  TextInputType.number, "name", patientHeight),
+              fromFieldNew("Weight(In KG)", TextInputAction.next,
+                  TextInputType.number, "name", patientWeight),
+              Padding(
+                padding:
+                const EdgeInsets.only(left: 13.0, right: 13.0, bottom: 7.0),
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 8.0, right: 8.0, bottom: 0, top: 0),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: "DOB:",
+                      ),
+                      onTap: () {
+                        _selectDate1(context);
+                      },
+                      controller: dateOfBirth,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
+        },
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            age=0;
+            dateOfBirth.text="";
+            Navigator.of(context).pop();
+          },
+          textColor: Colors.grey[900],
+          child: const Text('CANCEL'),
+        ),
+        new FlatButton(
+          onPressed: () {
+            if(dateOfBirth.text == null || dateOfBirth.text.trim() ==""){
+              AppData.showInSnackBar(context, "Please enter date of birth");
+            }else if(patientHeight.text == null || patientHeight.text.trim() ==""){
+              AppData.showInSnackBar(context, "Please enter height in CM");
+            }else if(patientWeight.text == null || patientWeight.text.trim() ==""){
+              AppData.showInSnackBar(context, "Please enter weight in kg");
+            }
+            else{
+              var inputFormat = DateFormat('dd-MM-yyyy');
+              var outputFormat = DateFormat('yyyy-MM-dd');
+              var date1 = inputFormat.parse(dateOfBirth.text);
+
+              age = (DateTime.parse(date1.toString()).difference(DateTime.now()).inDays/365 ).round().abs() ;
+              widget.model.patientList.age=age.toString();
+              print("age>>>"+age.toString());
+
+
+              if(age <=0){
+                AppData.showInSnackBar(context, "age should be greater than one");
+              }else if(testName1[index].length <=0 ||  venderName[index].trim() ==""){
+                AppData.showInSnackBar(context, "Please select at least one test");
+              }else{
+                String mapping = widget.model.patientList.patientId.trim() +
+                    "," +
+                    widget.model.patientList.patientName.toString().trim() +
+                    "," +
+                    widget.model.patientList.mob.trim() +
+                    "," +
+                    widget.model.patientList.gender.trim() +
+                    "," +
+                    patientHeight.text.trim() +
+                    "," +
+                    patientWeight.text.trim() +
+                    "," +
+                    age.toString().trim();
+                _callLabMedTelApp(mapping.trim());
 
                 Navigator.of(context).pop();
               }

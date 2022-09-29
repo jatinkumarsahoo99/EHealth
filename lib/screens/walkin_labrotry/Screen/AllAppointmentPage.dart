@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:user/localization/localizations.dart';
 import 'package:user/models/LabBookModel.dart' as lab;
@@ -45,6 +46,7 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
   Color txtColor = Colors.black;
   bool isOnline = false;
   TimeOfDay selectedTime = TimeOfDay.now();
+  TimeOfDay selectedTime1 = TimeOfDay.now();
   String time;
   TextEditingController myController = new TextEditingController();
   TextEditingController shiftname_ = new TextEditingController();
@@ -55,7 +57,7 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
     TextEditingController(),
     TextEditingController(),
   ];
-
+  TextEditingController timeController = new TextEditingController();
   List<bool> error = [false, false, false, false, false, false];
   bool _isSignUpLoading = false;
   String today;
@@ -573,10 +575,80 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
       ],
     );
   }
+  _selectTime(BuildContext context) async {
+    final TimeOfDay timeOfDay = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
 
+      initialEntryMode: TimePickerEntryMode.dial,
+    );
+    if(timeOfDay != null && timeOfDay != selectedTime)
+    {
+      setState(() {
+        selectedTime1 = timeOfDay;
+        // time = selectedTime.hour.toString()+":"+selectedTime.minute.toString()+":"+"00";
+        time = Const.getTimeForm(time:selectedTime1.hour.toString() )+":"+Const.getTimeForm(time:selectedTime1.minute.toString() )+":"+"00";
+        timeController.text = Const.getTimeForm(time:selectedTime1.hour.toString() )+":"+Const.getTimeForm(time:selectedTime1.minute.toString() )+":"+"00";
+        print(">>>>>>>>>>"+timeController.text);
+        // callApi(today,time);
+      });
+    }
+  }
+  Widget formFieldTime(
+      String hint,
+      ) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 13.0, right: 13.0, bottom: 0.0),
+      child: TextFormField(
+        style: TextStyle(fontSize: 12),
+        autofocus: false,
+        readOnly: true,
+        onTap: (){
+          _selectTime(context);
+        },
+        controller: timeController,
+          keyboardType: TextInputType.text,
+          enabled: true,
+        /* onFieldSubmitted: (value) {
+          textEditingController[index].text = value +" ("+ hint+")";
+        },*/
+        /*inputFormatters: [
+          WhitelistingTextInputFormatter(RegExp("[0-9]")),
+        ],*/
+        maxLength: 10,
+/*
+        enabled: false,
+*/
+        decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+          //prefixIcon: Icon(Icons.insert_drive_file_outlined),
+          // border: In,
+          alignLabelWithHint: false,
+
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          hintText: hint,
+          // suffix: Text(" (" + hint + ")"),
+          hintStyle: TextStyle(
+            color: Colors.black, // <-- Change this
+            fontSize: 12,
+            // fontWeight: FontWeight.w400,
+            fontStyle: FontStyle.normal,
+          ),
+          counterText: "",
+          contentPadding: EdgeInsets.only(left: 0, top: 4, right: 4),
+        ),
+      ),
+    );
+  }
   Widget changeStatus(BuildContext context, lab.Body userName, int i) {
     //NomineeModel nomineeModel = NomineeModel();
     //Nomine
+    timeController.text="";
     return AlertDialog(
       contentPadding: EdgeInsets.only(left: 5, right: 5, top: 20),
       //title: const Text(''),
@@ -606,11 +678,20 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
                 SizedBox(
                   height: 20,
                 ),
+                formFieldTime("Time"),
+                Divider(
+                  height: 2,
+                ),
                 ListTile(
                   title: Text("Booked"),
                   leading: Icon(Icons.book),
                   onTap: () {
-                    updateApi(userName.id.toString(), "0", i);
+                    if(timeController.text ==null || timeController.text.trim() == ""){
+                      AppData.showInSnackBar(context, "Please enter time");
+                    }else{
+                      updateApi(userName.id.toString(), "0", i,userName.regNo);
+                    }
+
                   },
                 ),
                 Divider(
@@ -620,7 +701,12 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
                   title: Text("In-Progress"),
                   leading: Icon(Icons.trending_up),
                   onTap: () {
-                    updateApi(userName.id.toString(), "1", i);
+                    if(timeController.text ==null || timeController.text.trim() == ""){
+                      AppData.showInSnackBar(context, "Please enter time");
+                    }else{
+                      updateApi(userName.id.toString(), "1", i,userName.regNo);
+                    }
+
                   },
                 ),
                 Divider(
@@ -630,7 +716,12 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
                   title: Text("Completed"),
                   leading: Icon(Icons.done_outline_outlined),
                   onTap: () {
-                    updateApi(userName.id.toString(), "2", i);
+                    if(timeController.text ==null || timeController.text.trim() == ""){
+                      AppData.showInSnackBar(context, "Please enter time");
+                    }else{
+                      updateApi(userName.id.toString(), "2", i,userName.regNo);
+                    }
+
                   },
                 )
               ],
@@ -650,9 +741,14 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
     );
   }
 
-  updateApi(String id, String statusCode, int i) {
+  updateApi(String id, String statusCode, int i,String regNo) {
     MyWidgets.showLoading(context);
-    Map<String, dynamic> mapPost = {"id": id, "appontstatus": statusCode};
+    var inputFormat = DateFormat('dd/MM/yyyy');
+    var outputFormat = DateFormat('yyyy-MM-dd');
+    var date1 = inputFormat.parse(today);
+    var date2 = outputFormat.format(date1);
+    Map<String, dynamic> mapPost = {"id": id, "appontstatus": statusCode,"regNo":regNo,"createdDt":date2,"createdTm":timeController.text};
+    log(">>>>>>>datajks"+mapPost.toString());
     if (widget.model.apntUserType == Const.HEALTH_SCREENING_APNT) {
       widget.model.POSTMETHOD_TOKEN(
           api: ApiFactory.CHANGE_STATUS_SCREENING,

@@ -160,7 +160,7 @@ class GetvendertestLists {
     data['patientId'] = this.patientId;
     data['testId'] = this.testId;
     data['testName'] = this.testName;
-    data['status'] = this.status;
+    data['status'] = this.status.toString();
     data['venderId'] = this.venderId;
     data['venderName'] = this.venderName;
     data['type'] = this.type;

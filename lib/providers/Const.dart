@@ -95,6 +95,10 @@ class Const {
 
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+  static getTimeForm({@required String time}) {
+    return  time.padLeft(2, "0");
+  }
+
   static getMode(String payMode) {
     /*if (payMode1 == PayMode1.cash) payModeCode = "1";
     if (payMode1 == PayMode1.cheque) payModeCode = "2";

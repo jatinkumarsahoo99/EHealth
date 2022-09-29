@@ -58,6 +58,9 @@ class EhsJsonReport {
   String stress;
   String stressDescription;
   String summary;
+  String createdDt;
+  String createdTm;
+  String vendorId;
 
   EhsJsonReport(
       {this.uHId,
@@ -98,7 +101,12 @@ class EhsJsonReport {
         this.thoughtDescription,
         this.stress,
         this.stressDescription,
-        this.summary});
+        this.summary,
+        this.createdDt,
+        this.createdTm,
+        this.vendorId
+
+      });
 
   EhsJsonReport.fromJson(Map<String, dynamic> json) {
     uHId = json['UH_Id'];
@@ -140,6 +148,23 @@ class EhsJsonReport {
     stress = json['Stress'];
     stressDescription = json['Stress_Description'];
     summary = json['Summary'];
+    if(json.containsKey(createdDt)){
+      createdDt = json['createdDt'];
+    }else{
+      createdDt="";
+    }
+    if(json.containsKey(createdTm)){
+      createdTm = json['createdTm'];
+    }else{
+      createdTm="";
+    }
+    if(json.containsKey(vendorId)){
+      vendorId = json['vendorId'];
+    }else{
+      vendorId="";
+    }
+
+
   }
 
   Map<String, dynamic> toJson() {
@@ -183,6 +208,9 @@ class EhsJsonReport {
     data['stress'] = this.stress;
     data['stress_Description'] = this.stressDescription;
     data['summary'] = this.summary;
+    data['createdDt'] = this.createdDt;
+    data['createdTm'] = this.createdTm;
+    data['vendorId'] = this.vendorId;
     return data;
   }
 }
