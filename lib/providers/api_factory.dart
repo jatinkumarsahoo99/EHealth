@@ -472,6 +472,11 @@ class ApiFactory {
 
   static String GET_labPatient = MAIN_URL + "rest-getAllLabRegdListView?id=";
 
+//Get MedTel_test List
+
+  static String GET_MedTelTest = MAIN_URL + "rest-getAllLabMedtelTests?";
+
+  static String GET_MedTelTestTime = MAIN_URL + "rest-getAllvlelabDateTimeLists?";
 
 
 

@@ -1157,7 +1157,8 @@ class _TestAppointmentPageState extends State<TestAppointmentPage>
                     "," +
                     body.age.toString() +
                     "," +
-                    dateofBirth1;
+                    dateofBirth1+","+"2022-10-04"+","+"01:00:00"+","+"0023"
+                ;
 
                 log("Value to send:>>>" + val);
                 callSpiro(val);

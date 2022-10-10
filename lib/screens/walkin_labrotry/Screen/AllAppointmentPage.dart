@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:user/localization/localizations.dart';
+import 'package:user/models/KeyvalueModel.dart';
 import 'package:user/models/LabBookModel.dart' as lab;
 import 'package:user/models/LoginResponse1.dart';
 import 'package:user/models/UserDetailsModel.dart';
 import 'package:user/providers/Const.dart';
+import 'package:user/providers/DropDown.dart';
 import 'package:user/providers/api_factory.dart';
 import 'package:user/providers/app_data.dart';
 import 'package:user/scoped-models/MainModel.dart';
@@ -22,7 +24,8 @@ import '../../CreateAppointmentLab.dart';
 class AllAppointmentPage extends StatefulWidget {
   final bool isConfirmPage;
   MainModel model;
-
+  static KeyvalueModel testTypeKeyValueModel = null;
+  static KeyvalueModel testTimeKeyValueModel = null;
   AllAppointmentPage({
     Key key,
     this.model,
@@ -48,6 +51,7 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
   TimeOfDay selectedTime = TimeOfDay.now();
   TimeOfDay selectedTime1 = TimeOfDay.now();
   String time;
+  String testName;
   TextEditingController myController = new TextEditingController();
   TextEditingController shiftname_ = new TextEditingController();
   TextEditingController starttime_ = new TextEditingController();
@@ -649,6 +653,13 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
     //NomineeModel nomineeModel = NomineeModel();
     //Nomine
     timeController.text="";
+
+
+    var inputFormat = DateFormat('dd/MM/yyyy');
+    var outputFormat = DateFormat('yyyy-MM-dd');
+    var date1 = inputFormat.parse(today);
+    var date2 = outputFormat.format(date1);
+    testName="";
     return AlertDialog(
       contentPadding: EdgeInsets.only(left: 5, right: 5, top: 20),
       //title: const Text(''),
@@ -678,7 +689,30 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
                 SizedBox(
                   height: 20,
                 ),
-                formFieldTime("Time"),
+                // formFieldTime("Time"),
+                DropDown.networkDropdownlablerForLab(
+                    "Select Test Time",
+                    ApiFactory.GET_MedTelTestTime+"id="+date2+"&idd="+userName.regNo,
+                    "testTypeTime", (KeyvalueModel model) {
+                  setState(() {
+                    AllAppointmentPage.testTimeKeyValueModel = model;
+                    AllAppointmentPage.testTypeKeyValueModel=null;
+                    timeController.text = AllAppointmentPage.testTimeKeyValueModel.name;
+                    // updateProfileModel.bloodGroup = model.key;
+                  });
+                }),
+                DropDown.networkDropdownlablerForLab(
+                    "Select Test",
+                    ApiFactory.GET_MedTelTest+"id="+userName.regNo+"&date="+
+                        date2+"&time="+timeController.text,
+                    "testType", (KeyvalueModel model) {
+                  setState(() {
+                    AllAppointmentPage.testTypeKeyValueModel = model;
+                    testName=model.name;
+
+                    // updateProfileModel.bloodGroup = model.key;
+                  });
+                }),
                 Divider(
                   height: 2,
                 ),
@@ -689,7 +723,7 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
                     if(timeController.text ==null || timeController.text.trim() == ""){
                       AppData.showInSnackBar(context, "Please enter time");
                     }else{
-                      updateApi(userName.id.toString(), "0", i,userName.regNo);
+                      updateApi(userName.id.toString(), "0", i,userName.regNo,testName.trim(),timeController.text);
                     }
 
                   },
@@ -704,9 +738,8 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
                     if(timeController.text ==null || timeController.text.trim() == ""){
                       AppData.showInSnackBar(context, "Please enter time");
                     }else{
-                      updateApi(userName.id.toString(), "1", i,userName.regNo);
+                      updateApi(userName.id.toString(), "1", i,userName.regNo,testName.trim(),timeController.text);
                     }
-
                   },
                 ),
                 Divider(
@@ -719,7 +752,7 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
                     if(timeController.text ==null || timeController.text.trim() == ""){
                       AppData.showInSnackBar(context, "Please enter time");
                     }else{
-                      updateApi(userName.id.toString(), "2", i,userName.regNo);
+                      updateApi(userName.id.toString(), "2", i,userName.regNo,testName.trim(),timeController.text);
                     }
 
                   },
@@ -741,13 +774,14 @@ class _AllAppointmentPageState extends State<AllAppointmentPage> {
     );
   }
 
-  updateApi(String id, String statusCode, int i,String regNo) {
+  updateApi(String id, String statusCode, int i,String regNo,String testName,String time) {
     MyWidgets.showLoading(context);
     var inputFormat = DateFormat('dd/MM/yyyy');
     var outputFormat = DateFormat('yyyy-MM-dd');
     var date1 = inputFormat.parse(today);
     var date2 = outputFormat.format(date1);
-    Map<String, dynamic> mapPost = {"id": id, "appontstatus": statusCode,"regNo":regNo,"createdDt":date2,"createdTm":timeController.text};
+    Map<String, dynamic> mapPost = {"id": id, "appontstatus": statusCode,"regNo":regNo,
+      "createdDt":date2,"createdTm":timeController.text,"testname":testName};
     log(">>>>>>>datajks"+mapPost.toString());
     if (widget.model.apntUserType == Const.HEALTH_SCREENING_APNT) {
       widget.model.POSTMETHOD_TOKEN(

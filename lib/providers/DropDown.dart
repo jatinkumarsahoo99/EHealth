@@ -27,6 +27,7 @@ import 'package:user/screens/Users/MyMedicalRecord/Allergiclist.dart';
 import 'package:user/screens/Users/MyMedicalRecord/BiomediImplants.dart';
 import 'package:user/screens/Users/MyMedicalRecord/LifeStyleHistory.dart';
 import 'package:user/screens/Users/UserSignUpForm.dart';
+import 'package:user/screens/walkin_labrotry/Screen/AllAppointmentPage.dart';
 import 'package:user/screens/walkin_labrotry/registration/LabSignUpForm3.dart';
 import 'package:user/screens/walkin_labrotry/registration/LabSignUpForm4.dart';
 import 'package:user/widgets/MyWidget.dart';
@@ -41,6 +42,8 @@ class DropDown {
   static KeyvalueModel marital;
   static KeyvalueModel job;
   static KeyvalueModel bloodgroupmodel;
+  static KeyvalueModel testTypeKeyValueModel;
+  static KeyvalueModel testTimeKeyValueModel;
   static KeyvalueModel gendermodel;
   static TimeScheduleModel timeModel;
   static KeyvalueModel relationmodel;
@@ -481,6 +484,7 @@ class DropDown {
 
   static networkDropdownlabler1(
       String label, final String API, String callFrom, Function fun) {
+    log("api>>>>>>>>>>>>>"+API);
     return newContainer2(DropdownSearch<KeyvalueModel>(
       mode: Mode.BOTTOM_SHEET,
       searchBoxDecoration: InputDecoration(
@@ -565,6 +569,13 @@ class DropDown {
             break;
           case "state":
             list = KeyvalueModel.fromJsonList(response.data);
+            break;
+          case "testType":
+            list = KeyvalueModel.fromJsonList(response.data['body']);
+            break;
+            break;
+          case "testTypeTime":
+            list = KeyvalueModel.fromJsonList(response.data['body']);
             break;
           case "block":
             list = KeyvalueModel.fromJsonList(response.data["districtList"]);
@@ -663,6 +674,223 @@ class DropDown {
             break;
           case "bloodgroup":
             bloodgroupmodel = data;
+            break;
+          case "testType":
+            testTypeKeyValueModel = data;
+            break;
+          case "testTypeTime":
+            testTimeKeyValueModel = data;
+            break;
+          case "relation":
+            relationmodel = data;
+            break;
+          case "speciality":
+            specialitymodel = data;
+            break;
+        }
+        //selectedKey = data;
+      },
+    ));
+  }
+
+  static networkDropdownlablerForLab(
+      String label, final String API, String callFrom, Function fun) {
+    log("api>>>>>>>>>>>>>"+API);
+    return newContainer2(DropdownSearch<KeyvalueModel>(
+      mode: Mode.BOTTOM_SHEET,
+      searchBoxDecoration: InputDecoration(
+        hintText: "Search here",
+        hintStyle: TextStyle(color: Colors.grey),
+        contentPadding: EdgeInsets.only(left: 8),
+        border: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.green, width: 3.0),
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(3.0),
+              bottomRight: Radius.circular(3.0),
+              topRight: Radius.circular(3.0),
+              topLeft: Radius.circular(3.0)),
+        ),
+      ),
+      dropdownSearchDecoration: InputDecoration(
+        // filled: true,
+        /* icon: Icon(
+          iconData,
+          size: iconSize,
+        ),*/
+        isDense: true,
+        disabledBorder: InputBorder.none,
+        // border: InputBorder.none,
+        enabledBorder: const OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
+        ),
+        border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
+            borderRadius: BorderRadius.circular(29)),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        contentPadding: EdgeInsets.all(0),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          borderSide: BorderSide(width: 0, color: AppData.kPrimaryLightColor),
+        ),
+      ),
+
+      errorBuilder: (cg, value, v) {
+        return Material(
+            child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "No Data Found",
+                  style: TextStyle(color: Colors.black),
+                )));
+      },
+      emptyBuilder: (context, searchEntry) {
+        return Material(
+          child: Center(
+            child: Text(
+              "No Data Found",
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+        );
+      },
+
+      label: label ?? "",
+      showSearchBox: true,
+      //items: maritalStatus,
+      selectedItem: getData(callFrom),
+      onFind: (String filter) async {
+        var response = await Dio().get(
+          //"http://5d85ccfb1e61af001471bf60.mockapi.io/user",
+          API,
+          //queryParameters: {"filter": filter},
+        );
+        //var models = response.data;
+        final statejsonResponse = response.data;
+        var list;
+        // var list = List<KeyvalueModel>.from(jsonResponse.map((i) => KeyvalueModel.fromsJson(i)));
+        switch (callFrom) {
+          case "city":
+            list = KeyvalueModel.fromJsonList(response.data);
+            break;
+          case "district":
+            list = KeyvalueModel.fromJsonList(response.data);
+            break;
+          case "country":
+            list = KeyvalueModel.fromJsonList(response.data);
+            break;
+          case "state":
+            list = KeyvalueModel.fromJsonList(response.data);
+            break;
+          case "testType":
+            list = KeyvalueModel.fromJsonList(response.data['body']);
+            break;
+            break;
+          case "testTypeTime":
+            list = KeyvalueModel.fromJsonList(response.data['body']);
+            break;
+          case "block":
+            list = KeyvalueModel.fromJsonList(response.data["districtList"]);
+            break;
+          case "relation":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "title":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "bloodgroup":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "speciality":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "marital":
+            list = KeyvalueModel.fromJsonList(response.data);
+            break;
+          case "admequipment":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "bloodgroupBooh":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "smoking":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "alcohol":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "countrydocp":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "statedocp":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "districtdocp":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "citydocp":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "bloodgroupdop":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "pcountry":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "pstate":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "pdistrict":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "pcity":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "gen":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "pets":
+            list = KeyvalueModel.fromJsonList(response.data["body"]);
+            break;
+          case "gender":
+            List<KeyvalueModel> listS = [];
+            listS.add(KeyvalueModel(name: "Male", key: "1"));
+            listS.add(KeyvalueModel(name: "Female", key: "2"));
+            listS.add(KeyvalueModel(name: "Transgender", key: "3"));
+            list = listS;
+            break;
+          case "ageproof":
+            list = KeyvalueModel.fromJsonList(response.data["districtList"]);
+            break;
+        }
+        return list;
+      },
+      //itemAsString: (KeyvalueModel u) => u.userAsString(),
+      onChanged: (KeyvalueModel data) {
+        fun(data);
+        switch (callFrom) {
+          case "district":
+            selectedKey = data;
+            break;
+          case "block":
+            selectedKey1 = data;
+            break;
+          case "gender":
+            gender = data;
+            break;
+          case "ageproof":
+            ageProof = data;
+            break;
+          case "marital":
+            marital = data;
+            break;
+          case "bloodgroup":
+            bloodgroupmodel = data;
+            break;
+          case "testType":
+            testTypeKeyValueModel = data;
+            break;
+          case "testTypeTime":
+            testTimeKeyValueModel = data;
             break;
           case "relation":
             relationmodel = data;
@@ -2221,6 +2449,12 @@ class DropDown {
         break;
       case "dosage":
         return EditReminder.dosageModel;
+        break;
+      case "testType":
+        return  AllAppointmentPage.testTypeKeyValueModel;
+        break;
+      case "testTypeTime":
+        return  AllAppointmentPage.testTimeKeyValueModel;
         break;
       case "speciality":
         return ProfileScreen.specialitymodel;

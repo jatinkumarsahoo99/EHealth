@@ -42,6 +42,8 @@ class Body {
   int appointStatus;
   String appntmntStatus;
 
+
+
   Body(
       {this.id,
         this.regNo,
@@ -52,7 +54,8 @@ class Body {
         this.appntmntDate,
         this.appntmntTime,
         this.appointStatus,
-        this.appntmntStatus});
+        this.appntmntStatus
+      });
 
   Body.fromJson(Map<String, dynamic> json) {
     id = json['id'];

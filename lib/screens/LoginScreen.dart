@@ -787,7 +787,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (c, i) {
-                            return ListTile(
+                            return  ListTile(
                               leading: Icon(
                                 CupertinoIcons.person_alt_circle,
                                 size: 44,
@@ -911,6 +911,9 @@ class _LoginScreenState extends State<LoginScreen> {
             } else if (map["body"]["roleid"] == "8".toLowerCase()) {
               Navigator.of(context).pushNamedAndRemoveUntil(
                   '/labDash', (Route<dynamic> route) => false);
+            }else if (map["body"]["roleid"] == "31".toLowerCase()) {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/labDash', (Route<dynamic> route) => false);
             } else if (map["body"]["roleid"] == "12".toLowerCase()) {
               Navigator.of(context).pushNamedAndRemoveUntil(
                   '/ambulancedash', (Route<dynamic> route) => false);
@@ -923,6 +926,8 @@ class _LoginScreenState extends State<LoginScreen> {
             } else if (map["body"]["roleid"] == "24".toLowerCase()) {
               Navigator.of(context).pushNamedAndRemoveUntil(
                   '/admin', (Route<dynamic> route) => false);
+            }else if (map["body"]["roleid"] == "28".toLowerCase()) {
+              AppData.showInSnackBar(context, "This Functionality are not available in mobile app please visit our web app");
             } else {
               AppData.showInSnackBar(context, "No Role Assign");
             }
